@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import sys
+
 class FourMomentum:
     def __init__(self, momentum=None, energy=0):
         self.momentum = momentum or []
@@ -19,10 +21,8 @@ class Event:
 
     def __str__(self):
         string = ''
-        for fourmomentum in self.momenta:
-            for component in fourmomentum.momentum:
-                string += str(component) + ' '
-            string += str(fourmomentum.energy)
+        for m in self.momenta:
+            string += '{0[0]} {0[1]} {0[2]} {1}'.format(m.momentum, m.energy)
             string += '\n'
         return string
 
@@ -31,9 +31,14 @@ class Event:
 
 
 def main():
+    if len(sys.argv) > 1:
+        filepath = sys.argv[1]
+    else:
+        filepath = 'testdata'
+
     events = []
 
-    with open('testdata') as data_file:
+    with open(filepath) as data_file:
         raw = data_file.read().split('\n')
 
         for i, line in enumerate(raw):
