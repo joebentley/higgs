@@ -28,6 +28,23 @@ class Event:
     def __len__(self):
         return len(self.momenta)
 
+    @staticmethod
+    def from_text(rest_of_file):
+        """ Generate Event from looking through the rest of the file
+            and constructing the momenta. """
+        # Our list of momenta for this event
+        momenta = []
+
+        # Start looping through the rest of the lines
+        for momentum_line in rest_of_file:
+            # If the line starts with Event, or is empty, don't parse
+            if momentum_line.startswith('Event') or momentum_line == '':
+                break
+
+            momenta.append(FourMomentum.from_line(momentum_line))
+
+        return Event(momenta)
+
 
 def main():
     if len(sys.argv) > 1:
@@ -43,18 +60,8 @@ def main():
         for i, line in enumerate(raw):
             # If the line starts with 'Event', begin to process it
             if line.startswith('Event'):
-                # Our list of momenta for this event
-                momenta = []
+                events.append(Event.from_text(raw[(i+1):]))
 
-                # Start looping through the rest of the lines
-                for momentum_line in raw[(i+1):]:
-                    # If the line starts with Event, or is empty, don't parse
-                    if momentum_line.startswith('Event') or momentum_line == '':
-                        break
-
-                    momenta.append(FourMomentum.from_line(momentum_line))
-
-                events.append(Event(momenta))
 
     # Only show events with more than 1 four momenta
     for i, event in enumerate(filter(lambda x: len(x) > 1, events)):
