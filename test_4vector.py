@@ -53,7 +53,7 @@ while param < length:
             for i in range(0, 2):
                 entry = lose_space(f.readline().replace('\\\n', ''))
                 set_of_p.append(entry)
-              
+
 len_set_e = len(set_of_events)
 len_set_p = len(set_of_p)
 for i in range(0,len_set_p):
@@ -77,8 +77,6 @@ for i in range(0, len_set_e):
     for j in range(0 ,2):
         events.append(event(set_of_events[i], set_of_p[k]))
         k += 1
-    
-        print(set_of_events[i])
-                
 
-    
+        print(set_of_events[i])
+
