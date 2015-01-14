@@ -22,8 +22,7 @@ class Event:
     def __str__(self):
         string = ''
         for m in self.momenta:
-            string += '{0[0]} {0[1]} {0[2]} {1}'.format(m.momentum, m.energy)
-            string += '\n'
+            string += '{0[0]} {0[1]} {0[2]} {1}\n'.format(m.momentum, m.energy)
         return string
 
     def __len__(self):
