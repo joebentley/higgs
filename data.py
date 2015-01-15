@@ -31,15 +31,19 @@ class Event:
     @staticmethod
     def from_text(rest_of_file):
         """ Generate Event from looking through the rest of the file
-            and constructing the momenta. """
+            until another event is found. """
         # Our list of momenta for this event
         momenta = []
 
         # Start looping through the rest of the lines
         for momentum_line in rest_of_file:
-            # If the line starts with Event, or is empty, don't parse
-            if momentum_line.startswith('Event') or momentum_line == '':
+            # If the line starts with Event, stop parsing
+            if momentum_line.startswith('Event'):
                 break
+
+            # Ignore empty lines
+            if len(momentum_line.strip()) == 0:
+                continue
 
             momenta.append(FourMomentum.from_line(momentum_line))
 
