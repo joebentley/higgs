@@ -7,7 +7,30 @@ class FourMomentum:
         self.momentum = momentum or []
         self.energy = energy
 
-    @staticmethod
+    #Define addition of 2 4-vectors, replaces + with this function.
+    def __add__(self, other):
+        E3 = self.energy + other.energy
+        p3 = []
+        for i in range(0, 2):
+            p3.append(self.momentum[i] + other.momentum[i])
+        p = FourMomentum(p3, E3)
+        return p
+
+    __radd__ = __add__
+
+    #Dot product between 2 4-vectors (in Minkowski geometry, signature (+, -, -,-) )
+    #p_1 and p_2 are FourMomentum objects replaces *
+    def __mul__(self, other):
+        res = 0
+        g = [1, 1, 1, -1]
+        for i in range(0, 3):
+            res += self.momentum[i] * other.momentum[i] 
+        res -= self.energy * other.energy
+        return -res
+    
+    __rmul__ = __mul__
+    
+    #@staticmethod
     def from_line(line):
         """ Parse line of format "p_x p_y p_z E" into FourMomentum object. """
         line = line.split()
@@ -49,14 +72,18 @@ class Event:
 
         return Event(momenta)
 
+events = []
+
+
+
 
 def main():
     if len(sys.argv) > 1:
         filepath = sys.argv[1]
     else:
-        filepath = 'testdata'
+        filepath = 'Signal10Events.txt'
 
-    events = []
+    #events = []
 
     with open(filepath) as data_file:
         raw = data_file.read().split('\n')
@@ -68,11 +95,35 @@ def main():
 
 
     # Only show events with more than 1 four momenta
-    for i, event in enumerate(filter(lambda x: len(x) > 1, events)):
-        print 'Event {0}'.format(i + 1)
-        print event
+    #for i, event in enumerate(filter(lambda x: len(x) > 1, events)):
+        #print('Event {0}'.format(i + 1))
+        #print(event)
 
 
 if __name__ == '__main__':
     main()
+
+def number_threshold(n):
+    new_events=[]
+    for i in range(0, len(events)):
+        if len(events[i].momenta) > n:
+            new_events.append(events[i])
+    return new_events
+
+def energy_threshold(E_m):
+    new_events = []
+    #Every event
+    for i in range(0, len(events)):
+        #every photon
+        #set a dummy variable, reset to 0 for each event
+        dum = 0
+        for j in range(0, len(events[i].momenta)):
+            if events[i].momenta[j].energy >= E_m:
+                dum += 1
+                #dummy variable increases if each photon reaches energy threshold
+        #only accepts if all photons reach threshold
+        if dum == len(events[i].momenta):
+            new_events.append(events[i])
+    return new_events
+
 
