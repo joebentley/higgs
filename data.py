@@ -113,6 +113,7 @@ def main():
 if __name__ == '__main__':
     main()
 
+#Number filter (more than n events)
 def number_threshold(n):
     new_events=[]
     for i in range(0, len(events)):
@@ -121,7 +122,7 @@ def number_threshold(n):
     return new_events
 
 
-events = number_threshold(2)
+events = number_threshold(1)
 
 
 for i in range(0, len(events)):
@@ -129,15 +130,10 @@ for i in range(0, len(events)):
     print('Event '+str(i))
     for j in range(0, len(events[i].momenta)):
         a += events[i].momenta[j]
-        print(str(events[i].momenta[j].energy))
-        print(str(events[i].momenta[j].transverse()))
+        print('Energy ' + str(events[i].momenta[j].energy))
+        print('p_T ' + str(events[i].momenta[j].transverse()))
     b = a * a
-    
-    
-    print(b)    
+    print('Invariant mass '  + str(b))    
 
-#To obtain the transverse momentum (p_T) and the pseudorapidity (eta) use
-#p_x^2 + p_y^2 = p_T^2
-#p_z = p_T sinh(eta)
 
 
