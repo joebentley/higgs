@@ -11,7 +11,7 @@ class FourMomentum:
     def __add__(self, other):
         E3 = self.energy + other.energy
         p3 = []
-        for i in range(0, 2):
+        for i in range(0, 3):
             p3.append(self.momentum[i] + other.momentum[i])
         p = FourMomentum(p3, E3)
         return p
@@ -30,7 +30,7 @@ class FourMomentum:
     
     __rmul__ = __mul__
     
-    #@staticmethod
+    @staticmethod
     def from_line(line):
         """ Parse line of format "p_x p_y p_z E" into FourMomentum object. """
         line = line.split()
@@ -74,9 +74,6 @@ class Event:
 
 events = []
 
-
-
-
 def main():
     if len(sys.argv) > 1:
         filepath = sys.argv[1]
@@ -94,10 +91,10 @@ def main():
                 events.append(Event.from_text(raw[(i+1):]))
 
 
-    # Only show events with more than 1 four momenta
+    #Only show events with more than 1 four momenta
     #for i, event in enumerate(filter(lambda x: len(x) > 1, events)):
-        #print('Event {0}'.format(i + 1))
-        #print(event)
+#        print('Event {0}'.format(i + 1))
+#        print(event)
 
 
 if __name__ == '__main__':
@@ -110,20 +107,19 @@ def number_threshold(n):
             new_events.append(events[i])
     return new_events
 
-def energy_threshold(E_m):
-    new_events = []
-    #Every event
-    for i in range(0, len(events)):
-        #every photon
-        #set a dummy variable, reset to 0 for each event
-        dum = 0
-        for j in range(0, len(events[i].momenta)):
-            if events[i].momenta[j].energy >= E_m:
-                dum += 1
-                #dummy variable increases if each photon reaches energy threshold
-        #only accepts if all photons reach threshold
-        if dum == len(events[i].momenta):
-            new_events.append(events[i])
-    return new_events
+
+events = number_threshold(2)
 
 
+for i in range(0, len(events)):
+    a = FourMomentum([0,0,0], 0)
+    print('Event '+str(i))
+    for j in range(0, len(events[i].momenta)):
+        a += events[i].momenta[j]
+        print(str(events[i].momenta[j].energy))
+        print(str(events[i].momenta[j].momentum))
+    b = a * a
+    
+    
+    print(b)    
+    
