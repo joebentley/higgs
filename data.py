@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
-import sys
+import sys, math
 
 class FourMomentum:
     def __init__(self, momentum=None, energy=0):
         self.momentum = momentum or []
         self.energy = energy
+
 
     #Define addition of 2 4-vectors, replaces + with this function.
     def __add__(self, other):
@@ -29,6 +30,16 @@ class FourMomentum:
         return -res
     
     __rmul__ = __mul__
+
+    #Transverse momentum of a 4-momentum
+    def transverse(self):
+        p_T2 = self.momentum[0]**2 + self.momentum[1]**2
+        return math.sqrt(p_T2)
+
+    #The pseudorapidity
+    def eta(self):
+        sinheta = self.momentum[2]/self.transverse()
+        return math.asinh(sinheta)
     
     @staticmethod
     def from_line(line):
@@ -37,6 +48,8 @@ class FourMomentum:
         momentum = [float(line[0]), float(line[1]), float(line[2])]
         energy = float(line[3])
         return FourMomentum(momentum, energy)
+
+    
 
 class Event:
     def __init__(self, momenta=None):
@@ -117,9 +130,14 @@ for i in range(0, len(events)):
     for j in range(0, len(events[i].momenta)):
         a += events[i].momenta[j]
         print(str(events[i].momenta[j].energy))
-        print(str(events[i].momenta[j].momentum))
+        print(str(events[i].momenta[j].transverse()))
     b = a * a
     
     
     print(b)    
-    
+
+#To obtain the transverse momentum (p_T) and the pseudorapidity (eta) use
+#p_x^2 + p_y^2 = p_T^2
+#p_z = p_T sinh(eta)
+
+
