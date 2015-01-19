@@ -3,13 +3,20 @@
 import sys, math
 
 class FourMomentum:
+    """ 4-momentum class with the z-component (momentum[2]) assumed to
+        be aligned with the beam axis.
+
+        Attributes:
+        self.momentum = [p_x, p_y, p_z] -- 3 item list of momentum components
+        self.energy                     -- energy """
+
     def __init__(self, momentum=None, energy=0):
         self.momentum = momentum or []
         self.energy = energy
 
 
-    #Define addition of 2 4-vectors, replaces + with this function.
     def __add__(self, other):
+        """ Returns the addition of 2 4-vectors. """
         E3 = self.energy + other.energy
         p3 = []
         for i in range(0, 3):
@@ -19,28 +26,33 @@ class FourMomentum:
 
     __radd__ = __add__
 
-    #Dot product between 2 4-vectors (in Minkowski geometry, signature (+, -, -,-) )
-    #p_1 and p_2 are FourMomentum objects replaces *
     def __mul__(self, other):
+        """ Returns the dot product between 2 4-vectors (in Minkowski
+            geometry, signature (+, -, -,-)). """
         res = 0
         g = [1, 1, 1, -1]
         for i in range(0, 3):
-            res += self.momentum[i] * other.momentum[i] 
+            res += self.momentum[i] * other.momentum[i]
         res -= self.energy * other.energy
         return -res
-    
+
     __rmul__ = __mul__
 
-    #Transverse momentum of a 4-momentum
     def transverse(self):
+        """ Return the transverse momentum of a 4-momentum, calculated
+            from the x and y components of the 4-momentum. """
         p_T2 = self.momentum[0]**2 + self.momentum[1]**2
         return math.sqrt(p_T2)
 
-    #The pseudorapidity
     def eta(self):
+        """ Return the pseudorapidity of the 4-vector. """
         sinheta = self.momentum[2]/self.transverse()
         return math.asinh(sinheta)
-    
+
+    def azimuthal(self):
+        """ Return the azimuthal angle of the 4-vector. """
+        pass
+
     @staticmethod
     def from_line(line):
         """ Parse line of format "p_x p_y p_z E" into FourMomentum object. """
@@ -49,7 +61,7 @@ class FourMomentum:
         energy = float(line[3])
         return FourMomentum(momentum, energy)
 
-    
+
 
 class Event:
     def __init__(self, momenta=None):
@@ -85,7 +97,14 @@ class Event:
 
         return Event(momenta)
 
-events = []
+
+
+#Number filter (more than n events)
+def number_threshold(events, n):
+    """ Filters events so that only events with more than
+        n events are returned. """
+    return list(filter(lambda x: len(x) > n, events))
+
 
 def main():
     if len(sys.argv) > 1:
@@ -93,7 +112,7 @@ def main():
     else:
         filepath = 'Signal10Events.txt'
 
-    #events = []
+    events = []
 
     with open(filepath) as data_file:
         raw = data_file.read().split('\n')
@@ -103,37 +122,20 @@ def main():
             if line.startswith('Event'):
                 events.append(Event.from_text(raw[(i+1):]))
 
+    events = number_threshold(events, 1)
 
-    #Only show events with more than 1 four momenta
-    #for i, event in enumerate(filter(lambda x: len(x) > 1, events)):
-#        print('Event {0}'.format(i + 1))
-#        print(event)
+    for i, event in enumerate(events):
+        a = FourMomentum([0,0,0], 0)
+        print('Event {0}', i)
+        for momenta in event.momenta:
+            a += momenta
+            print('Energy: {0}', momenta.energy)
+            print('p_T: {0}', momenta.transverse())
+        b = a * a
+        print('Invariant mass: {0}', b)
 
 
 if __name__ == '__main__':
     main()
-
-#Number filter (more than n events)
-def number_threshold(n):
-    new_events=[]
-    for i in range(0, len(events)):
-        if len(events[i].momenta) > n:
-            new_events.append(events[i])
-    return new_events
-
-
-events = number_threshold(1)
-
-
-for i in range(0, len(events)):
-    a = FourMomentum([0,0,0], 0)
-    print('Event '+str(i))
-    for j in range(0, len(events[i].momenta)):
-        a += events[i].momenta[j]
-        print('Energy ' + str(events[i].momenta[j].energy))
-        print('p_T ' + str(events[i].momenta[j].transverse()))
-    b = a * a
-    print('Invariant mass '  + str(b))    
-
 
 
