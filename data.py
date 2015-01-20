@@ -105,6 +105,16 @@ def number_threshold(events, n):
         n events are returned. """
     return list(filter(lambda x: len(x) > n, events))
 
+#Transverse momentum filter
+def transverse_threshold(events, p_T):
+    for i in range(0, len(events)):
+        events[i].momenta = list(filter(lambda x: x.transverse() > p_T, events[i].momenta))
+    return events
+#Energy filter
+def energy_threshold(events, E):
+    for i in range(0, len(events)):
+        events[i].momenta = list(filter(lambda x: x.energy > E, events[i].momenta))
+    return events
 
 def main():
     if len(sys.argv) > 1:
@@ -122,8 +132,19 @@ def main():
             if line.startswith('Event'):
                 events.append(Event.from_text(raw[(i+1):]))
 
+    #Filtering events
+    events = energy_threshold(events, 40)
+    #More than 2
+    #events = number_threshold(events, 1)
+    #One photon with transverse momentum > 20GeV
+    events = transverse_threshold(events, 20)
+    #Make sure there is another photon
     events = number_threshold(events, 1)
-
+    #The other photon with p_T >40GeV
+    events = transverse_threshold(events, 40)
+    
+    #events = number_threshold(events, 1)
+    #Prints out events + invariant mass of system
     for i, event in enumerate(events):
         a = FourMomentum([0,0,0], 0)
         print('Event {0}', i)
@@ -132,6 +153,7 @@ def main():
             print('Energy: {0}', momenta.energy)
             print('p_T: {0}', momenta.transverse())
         b = a * a
+        b = math.sqrt(b)
         print('Invariant mass: {0}', b)
 
 
