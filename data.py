@@ -107,7 +107,6 @@ class Event:
         return event
 
 
-
 #Number filter (more than n events)
 def number_threshold(events, n):
     """ Filters events so that only events with more than
@@ -130,7 +129,7 @@ def main():
     if len(sys.argv) > 1:
         filepath = sys.argv[1]
     else:
-        filepath = 'Signal10Events.txt'
+        filepath = 'Higgs_1e4.txt'
 
     events = []
 
@@ -144,15 +143,13 @@ def main():
 
     #Filtering events
     events = energy_threshold(events, 40)
-    #More than 2
-    events = number_threshold(events, 1)
     #One photon with transverse momentum > 20GeV
     events = transverse_threshold(events, 20)
     #The other photon with p_T >40GeV
     events = transverse_threshold(events, 40)
 
-    # only show events with at least 1 momenta
-    events = number_threshold(events, 0)
+    # only show events with at least 2 momenta
+    events = number_threshold(events, 2)
 
     #Prints out events + invariant mass of system
     for event in events:
@@ -163,6 +160,7 @@ def main():
             print('Energy:', momenta.energy)
             print('p_T:', momenta.transverse())
         b = a * a
+        print(event)
         b = math.sqrt(b)
         print('Invariant mass:', b)
 
