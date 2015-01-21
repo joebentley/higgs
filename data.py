@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys, math
+import matplotlib.pyplot as plt
 
 class FourMomentum:
     """ 4-momentum class with the z-component (momentum[2]) assumed to
@@ -159,14 +160,26 @@ def main():
     # only show events with at least 2 momenta
     events = number_threshold(events, 2)
 
+    invariant_masses = []
     #Prints out events + invariant mass of system
     for event in events:
         print('Event', event.id)
         for momenta in event.momenta:
             print('Energy:', momenta.energy)
             print('p_T:', momenta.transverse())
-        print('Invariant mass:', event.invariant_mass())
 
+        invariant_mass = event.invariant_mass()
+        invariant_masses.append(invariant_mass)
+        print('Invariant mass:', invariant_mass)
+
+
+    n, bins, patches = plt.hist(invariant_masses, 200, facecolor='b', alpha=0.75)
+    plt.xlabel('Invariant Mass (GeV/c^2)')
+    plt.ylabel('Frequency')
+    plt.title('Histogram of invariant masses')
+    plt.axis([0, 600, 0, 80])
+    plt.grid(True)
+    plt.show()
 
 if __name__ == '__main__':
     main()
