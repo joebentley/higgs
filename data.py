@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import sys, math
 
@@ -64,7 +64,8 @@ class FourMomentum:
 
 
 class Event:
-    def __init__(self, momenta=None):
+    def __init__(self, id=0, momenta=None):
+        self.id = id
         self.momenta = momenta or []
 
     def __str__(self):
@@ -80,14 +81,21 @@ class Event:
     def from_text(rest_of_file):
         """ Generate Event from looking through the rest of the file
             until another event is found. """
+
+        event = Event()
+
         # Our list of momenta for this event
         momenta = []
 
         # Start looping through the rest of the lines
-        for momentum_line in rest_of_file:
-            # If the line starts with Event, stop parsing
+        for line_num, momentum_line in enumerate(rest_of_file):
+            # If the line starts with Event and we aren't on line 1, stop parsing
             if momentum_line.startswith('Event'):
-                break
+                if line_num == 0:
+                    event.id = momentum_line.split()[1]
+                    continue
+                else:
+                    break
 
             # Ignore empty lines
             if len(momentum_line.strip()) == 0:
@@ -95,25 +103,27 @@ class Event:
 
             momenta.append(FourMomentum.from_line(momentum_line))
 
-        return Event(momenta)
+        event.momenta = momenta
+        return event
 
 
 
 #Number filter (more than n events)
 def number_threshold(events, n):
     """ Filters events so that only events with more than
-        n events are returned. """
+        n momenta are returned. """
     return list(filter(lambda x: len(x) > n, events))
 
 #Transverse momentum filter
 def transverse_threshold(events, p_T):
-    for i in range(0, len(events)):
-        events[i].momenta = list(filter(lambda x: x.transverse() > p_T, events[i].momenta))
+    for event in events:
+        event.momenta = list(filter(lambda x: x.transverse() > p_T, event.momenta))
     return events
+
 #Energy filter
 def energy_threshold(events, E):
-    for i in range(0, len(events)):
-        events[i].momenta = list(filter(lambda x: x.energy > E, events[i].momenta))
+    for event in events:
+        event.momenta = list(filter(lambda x: x.energy > E, event.momenta))
     return events
 
 def main():
@@ -130,31 +140,31 @@ def main():
         for i, line in enumerate(raw):
             # If the line starts with 'Event', begin to process it
             if line.startswith('Event'):
-                events.append(Event.from_text(raw[(i+1):]))
+                events.append(Event.from_text(raw[i:]))
 
     #Filtering events
     events = energy_threshold(events, 40)
     #More than 2
-    #events = number_threshold(events, 1)
+    events = number_threshold(events, 1)
     #One photon with transverse momentum > 20GeV
     events = transverse_threshold(events, 20)
-    #Make sure there is another photon
-    events = number_threshold(events, 1)
     #The other photon with p_T >40GeV
     events = transverse_threshold(events, 40)
-    
-    #events = number_threshold(events, 1)
+
+    # only show events with at least 1 momenta
+    events = number_threshold(events, 0)
+
     #Prints out events + invariant mass of system
-    for i, event in enumerate(events):
+    for event in events:
         a = FourMomentum([0,0,0], 0)
-        print('Event {0}', i)
+        print('Event', event.id)
         for momenta in event.momenta:
             a += momenta
-            print('Energy: {0}', momenta.energy)
-            print('p_T: {0}', momenta.transverse())
+            print('Energy:', momenta.energy)
+            print('p_T:', momenta.transverse())
         b = a * a
         b = math.sqrt(b)
-        print('Invariant mass: {0}', b)
+        print('Invariant mass:', b)
 
 
 if __name__ == '__main__':
