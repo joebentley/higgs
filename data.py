@@ -77,6 +77,14 @@ class Event:
     def __len__(self):
         return len(self.momenta)
 
+    def invariant_mass(self):
+        """ Calculate the invariant mass from the four momenta. """
+        a = FourMomentum([0,0,0], 0)
+        for momenta in self.momenta:
+            a += momenta
+        b = a * a
+        return math.sqrt(abs(b))
+
     @staticmethod
     def from_text(rest_of_file):
         """ Generate Event from looking through the rest of the file
@@ -153,16 +161,11 @@ def main():
 
     #Prints out events + invariant mass of system
     for event in events:
-        a = FourMomentum([0,0,0], 0)
         print('Event', event.id)
         for momenta in event.momenta:
-            a += momenta
             print('Energy:', momenta.energy)
             print('p_T:', momenta.transverse())
-        b = a * a
-        print(event)
-        b = math.sqrt(b)
-        print('Invariant mass:', b)
+        print('Invariant mass:', event.invariant_mass())
 
 
 if __name__ == '__main__':
