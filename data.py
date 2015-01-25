@@ -153,48 +153,26 @@ def main():
                 events.append(Event.from_text(raw[i:]))
 
     #Filtering events
-#<<<<<<< Updated upstream
     events = energy_threshold(events, 40)
-    #One photon with transverse momentum > 20GeV
-#=======
-    #More than 2
-    events = number_threshold(events, 1)
     #One photon with transverse momentum > 20GeV (choose the lower p_T,
     #if you filter 40 then 20, you will get no results!)
-#>>>>>>> Stashed changes
     events = transverse_threshold(events, 20)
     #The other photon with p_T >40GeV
     events = transverse_threshold(events, 40)
-#<<<<<<< Updated upstream
 
     # only show events with at least 2 momenta
     events = number_threshold(events, 2)
 
     invariant_masses = []
-#=======
-    #events = number_threshold(events, 1)
-#>>>>>>> Stashed changes
-    a = FourMomentum([0,0,0], 0)
-    #Prints out events + invariant mass of system
     for event in events:
         print('Event', event.id)
         for momenta in event.momenta:
-#<<<<<<< Updated upstream
             print('Energy:', momenta.energy)
             print('p_T:', momenta.transverse())
 
         invariant_mass = event.invariant_mass()
         invariant_masses.append(invariant_mass)
         print('Invariant mass:', invariant_mass)
-#=======
-        a += momenta
-        print('Energy: {0}', momenta.energy)
-        print('p_T: {0}', momenta.transverse())
-        b = a * a
-        b = sqrt(b)
-        print('Invariant mass: {0}', b)
-    #The invariant mass, b, should be about 120GeV
-#>>>>>>> Stashed changes
 
     n, bins, patches = plt.hist(invariant_masses, 200, facecolor='b', alpha=0.75)
     plt.xlabel('Invariant Mass (GeV/c^2)')
