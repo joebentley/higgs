@@ -125,23 +125,18 @@ def number_threshold(events, n):
     return list(filter(lambda x: len(x) > n, events))
 
 #Transverse momentum filter
-def transverse_threshold_1(events, p_T):
+def transverse_threshold(events, p_T):
     for event in events:
         event.momenta = list(filter(lambda x: x.transverse() > p_T, event.momenta))
     return events
-
-#The p_T = 40GeV case is different (we want to keep the 20GeV photon) 
+#Keeps the 20GeV transverse momentum
 def transverse_threshold_2(events, p_T):
-    events3 = []
-    #Use the usual threshold
-    events2 = transverse_threshold_1(events, p_T)
-    #For loop through the new events (have to keep the old events)
-    for i in range(0, len(events)):
-        #If more than 0 photons p_T>40GeV
-        if len(events2[i]) > 0:
-            #Append the original event instead of the filtered event to include the >20GeV photon
-            events3.append(events[i])
-    return events3
+    events2 = []
+    for event in events:
+        for momenta in event.momenta:
+            if momenta.transvese() > p_T:
+                events2.append(event)
+    return events2
 
 #Energy filter
 def energy_threshold(events, E):
@@ -166,43 +161,26 @@ def main():
                 events.append(Event.from_text(raw[i:]))
 
     #Filtering events
-#<<<<<<< Updated upstream
     events = energy_threshold(events, 40)
-    #One photon with transverse momentum > 20GeV
-#=======
-    #More than 2
-    events = number_threshold(events, 1)
     #One photon with transverse momentum > 20GeV (choose the lower p_T,
     #if you filter 40 then 20, you will get no results!)
-#>>>>>>> Stashed changes
-    events = transverse_threshold_1(events, 20)
+    events = transverse_threshold(events, 20)
     #The other photon with p_T >40GeV
-    events = transverse_threshold_1(events, 40)
-    events = number_threshold(events, 0)
+    events = transverse_threshold_2(events, 40)
+
+    # only show events with at least 2 momenta
+    events = number_threshold(events, 2)
+
     invariant_masses = []
-#=======
-#>>>>>>> Stashed changes
-    a = FourMomentum([0,0,0], 0)
-    #Prints out events + invariant mass of system
     for event in events:
         print('Event', event.id)
         for momenta in event.momenta:
-#<<<<<<< Updated upstream
             print('Energy:', momenta.energy)
             print('p_T:', momenta.transverse())
 
         invariant_mass = event.invariant_mass()
         invariant_masses.append(invariant_mass)
         print('Invariant mass:', invariant_mass)
-#=======
-        a += momenta
-        print('Energy: {0}', momenta.energy)
-        print('p_T: {0}', momenta.transverse())
-        b = a * a
-        b = sqrt(abs(b))
-        print('Invariant mass: {0}', b)
-    #The invariant mass, b, should be about 120GeV
-#>>>>>>> Stashed changes
 
     n, bins, patches = plt.hist(invariant_masses, 200, facecolor='b', alpha=0.75)
     plt.xlabel('Invariant Mass (GeV/c^2)')

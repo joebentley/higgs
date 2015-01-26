@@ -129,6 +129,14 @@ def transverse_threshold(events, p_T):
     for event in events:
         event.momenta = list(filter(lambda x: x.transverse() > p_T, event.momenta))
     return events
+#Keeps the 20GeV transverse momentum
+def transverse_threshold_2(events, p_T):
+    events2 = []
+    for event in events:
+        for momenta in event.momenta:
+            if momenta.transverse() > p_T:
+                events2.append(event)
+    return events2
 
 #Energy filter
 def energy_threshold(events, E):
@@ -158,7 +166,7 @@ def main():
     #if you filter 40 then 20, you will get no results!)
     events = transverse_threshold(events, 20)
     #The other photon with p_T >40GeV
-    events = transverse_threshold(events, 40)
+    events = transverse_threshold_2(events, 40)
 
     # only show events with at least 2 momenta
     events = number_threshold(events, 2)
