@@ -80,6 +80,10 @@ class Event:
     def __len__(self):
         return len(self.momenta)
 
+    def filter_highest(self, n):
+        """ Only use n highest tranverse momentum. """
+        self.momenta = sorted(self.momenta, key=lambda x: x.transverse())[:2]
+
     def invariant_mass(self):
         """ Calculate the invariant mass from the four momenta. """
         a = FourMomentum([0,0,0], 0)
@@ -129,6 +133,7 @@ def transverse_threshold(events, p_T):
     for event in events:
         event.momenta = list(filter(lambda x: x.transverse() > p_T, event.momenta))
     return events
+
 #Keeps the 20GeV transverse momentum
 def transverse_threshold_2(events, p_T):
     events2 = []
@@ -160,33 +165,47 @@ def main():
             if line.startswith('Event'):
                 events.append(Event.from_text(raw[i:]))
 
+
     #Filtering events
     events = energy_threshold(events, 40)
-    #One photon with transverse momentum > 20GeV (choose the lower p_T,
-    #if you filter 40 then 20, you will get no results!)
+    #One photon with transverse momentum > 20GeV
     events = transverse_threshold(events, 20)
     #The other photon with p_T >40GeV
     events = transverse_threshold_2(events, 40)
 
     # only show events with at least 2 momenta
-    events = number_threshold(events, 2)
+    events = number_threshold(events, 1)
+
+    for event in events:
+        event.filter_highest(2)
+
+    for event in events:
+        if len(event) > 2:
+            raise ValueError
+
 
     invariant_masses = []
     for event in events:
-        print('Event', event.id)
-        for momenta in event.momenta:
-            print('Energy:', momenta.energy)
-            print('p_T:', momenta.transverse())
+        invariant_masses.append(event.invariant_mass())
 
-        invariant_mass = event.invariant_mass()
-        invariant_masses.append(invariant_mass)
-        print('Invariant mass:', invariant_mass)
+    #for event in events:
+    #    print(event.momenta)
+    #    print('Event', event.id)
+    #    for momenta in event.momenta:
+    #        print('Energy:', momenta.energy)
+    #        print('p_T:', momenta.transverse())
 
-    n, bins, patches = plt.hist(invariant_masses, 200, facecolor='b', alpha=0.75)
+    #    print('Invariant mass:', invariant_mass)
+
+
+    weights = list(map(lambda x: 0.1, invariant_masses))
+
+    n, bins, patches = plt.hist(invariant_masses, 1000, normed=True,
+            weights=weights, facecolor='b', alpha=0.75)
     plt.xlabel('Invariant Mass (GeV/c^2)')
     plt.ylabel('Frequency')
     plt.title('Histogram of invariant masses')
-    plt.axis([0, 600, 0, 80])
+    plt.axis([100, 200, 0, 0.1])
     plt.grid(True)
     plt.show()
 
