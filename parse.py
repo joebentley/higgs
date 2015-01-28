@@ -2,6 +2,7 @@
 
 import sys, argparse
 import matplotlib.pyplot as plt
+from multiprocessing import Pool
 
 from fourmomentum import FourMomentum
 from event import Event
@@ -34,18 +35,25 @@ def energy_threshold(events, E):
         event.momenta = list(filter(lambda x: x.energy > E, event.momenta))
     return events
 
-def parse_file(path):
-    events = []
+def parse_file(path, count=False):
 
+    events = []
     with open(path) as data_file:
         raw = data_file.read().split('\n')
 
-        # TODO: Need to make this faster
+        counter = 0
+        p = Pool(5)
         for i, line in enumerate(raw):
             # If the line starts with 'Event', begin to process it
             if line.startswith('Event'):
-                # TODO: Dispatch job here!
-                events.append(Event.from_text(raw[i:]))
+                # Only use next 10 lines
+                p.apply_async(events.append(Event.from_text(raw[i:i+10])))
+                #events.append(Event.from_text(raw[i:i+10]))
+
+                if count:
+                    counter += 1
+                    if counter % 1000 == 0:
+                        print(counter)
 
     return events
 
@@ -60,14 +68,14 @@ def main():
                         help='Whether to print the calculated invariant masses to stdout.')
     parser.add_argument('--parsed', action='store_true',
                         help='Print parsing information to stdout.')
-    parser.add_argument('--counter', nargs=1, default=100, type=int, metavar='n',
-                        help='Print every n calculations')
+    parser.add_argument('--count', action='store_true',
+                        help='Whether to print current line of parsing.')
     parser.add_argument('--hist', action='store_false',
-                        help="Don't show histogram")
+                        help="Don't show histogram.")
     args = parser.parse_args()
 
-    events = parse_file(args.higgs_path)
-    events += parse_file(args.background_path)
+    events = parse_file(args.higgs_path, count=args.count)
+    events += parse_file(args.background_path, count=args.count)
 
     #Filtering events
     events = energy_threshold(events, 40)
@@ -88,12 +96,7 @@ def main():
 
     # Calculate all the invariant masses and save them
     invariant_masses = []
-    counter = 0
     for i, event in enumerate(events):
-        counter += 1
-        if counter % args.count == 0:
-            print(i)
-
         invariant_masses.append(event.invariant_mass())
 
     if args.print:
@@ -109,7 +112,6 @@ def main():
                 print('p_T:', momenta.transverse())
 
             print('Invariant mass:', invariant_mass)
-
 
     if args.hist:
         weights = list(map(lambda x: 0.1, invariant_masses))

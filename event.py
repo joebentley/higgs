@@ -37,6 +37,7 @@ class Event:
         # Our list of momenta for this event
         momenta = []
 
+        # TODO: Find way to not use entire rest of the file
         # Start looping through the rest of the lines
         for line_num, momentum_line in enumerate(rest_of_file):
             # If the line starts with Event and we aren't on line 1, stop parsing
