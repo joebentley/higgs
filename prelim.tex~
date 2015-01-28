@@ -4,11 +4,11 @@
 \usepackage{amsmath}
 \begin{document}
 \section{Theoretical Background}
-\subsection{Higgs Mechanism}
-The Higgs mechanism is an electroweak process that conserves the gauge symmetry of the Lagrangian (density) of the standard model of particle physics, whilst still giving rise to mass terms to occur in each particle in the SM.
-\subsection{Higgs Production}
-The dominant production mode (88\% of produced Higgs) for Higgs bosons is 'gluon fusion' $gg \rightarrow H$  (referred to as ggF.) 
-
+The dominant production mode (88\% of produced Higgs) for Higgs bosons is 'gluon fusion'
+\begin{equation}
+gg \rightarrow H
+\end{equation}
+This and 'Vector Boson Fusion' or (VBF) are the most common Higgs production mechanisms in particle interactions.
 
 Higgs decay into 2 diphotons via a heavy quark (top) loop. The nature of this decay (involving 3 vertices) mean that the branching ratio is orders of magnitude lower than other decays (such as that to $b \bar{b}$ pairs)
 \begin{equation}

@@ -14,7 +14,7 @@ def number_threshold(events, n):
         n momenta are returned. """
     return list(filter(lambda x: len(x) > n, events))
 
-#Transverse  momentum filter
+#Transverse momentum filter
 def transverse_threshold(events, p_T):
     for event in events:
         event.momenta = list(filter(lambda x: x.transverse() > p_T, event.momenta))
@@ -76,8 +76,7 @@ def main():
 
     
     events = parse_file(args.higgs_path, count=args.count)
-    #Comment out the background if you want to change functions etc.
-    events += parse_file(args.background_path, count=args.count)
+    #events += parse_file(args.background_path, count=args.count)
 
     #Filtering events
     events = energy_threshold(events, 40)
@@ -86,12 +85,11 @@ def main():
     #The other photon with p_T >40GeV
     events = transverse_threshold_2(events, 40)
 
-    #only show events with at least 2 momenta
+    # only show events with at least 2 momenta
     events = number_threshold(events, 1)
-    
+
     for event in events:
         event.filter_highest(2)
-        #event.filter_2_angles()
 
     for event in events:
         if len(event) > 2:

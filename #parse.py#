@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bienv python3
 
 import sys, argparse
 import matplotlib.pyplot as plt
@@ -14,7 +14,7 @@ def number_threshold(events, n):
         n momenta are returned. """
     return list(filter(lambda x: len(x) > n, events))
 
-#Transverse  momentum filter
+#Transverse momentum filter
 def transverse_threshold(events, p_T):
     for event in events:
         event.momenta = list(filter(lambda x: x.transverse() > p_T, event.momenta))
@@ -41,7 +41,7 @@ def parse_file(path, count=False):
     with open(path) as data_file:
         raw = data_file.read().split('\n')
 
-        #counter = 0
+        counter = 0
         p = Pool(50)
         for i, line in enumerate(raw):
             # If the line starts with 'Event', begin to process it
@@ -64,7 +64,7 @@ def main():
                         dest='higgs_path', help='Relative path to higgs data')
     parser.add_argument('--background', nargs=1, default='background.txt', metavar='path_to_background',
                         dest='background_path', help='Relative path to background data')
-    parser.add_argument('--Print', action='store_true',
+    parser.add_argument('--print', action='store_true',
                         help='Whether to print the calculated invariant masses to stdout.')
     parser.add_argument('--parsed', action='store_true',
                         help='Print parsing information to stdout.')
@@ -74,9 +74,7 @@ def main():
                         help="Don't show histogram.")
     args = parser.parse_args()
 
-    
     events = parse_file(args.higgs_path, count=args.count)
-    #Comment out the background if you want to change functions etc.
     events += parse_file(args.background_path, count=args.count)
 
     #Filtering events
@@ -86,12 +84,11 @@ def main():
     #The other photon with p_T >40GeV
     events = transverse_threshold_2(events, 40)
 
-    #only show events with at least 2 momenta
+    # only show events with at least 2 momenta
     events = number_threshold(events, 1)
-    
+
     for event in events:
         event.filter_highest(2)
-        #event.filter_2_angles()
 
     for event in events:
         if len(event) > 2:
@@ -102,7 +99,7 @@ def main():
     for i, event in enumerate(events):
         invariant_masses.append(event.invariant_mass())
 
-    if args.Print:
+    if args.print:
         for mass in invariant_masses:
             print(mass)
 
