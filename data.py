@@ -35,14 +35,21 @@ def energy_threshold(events, E):
     return events
 
 def main():
-    if len(sys.argv) > 1:
-        filepath = sys.argv[1]
-    else:
-        filepath = 'Higgs_1e4.txt'
+    parser = argparse.ArgumentParser(description='Generate histogram from Higgs event data')
+    parser.add_argument('-f', nargs=1, default='Higgs_1e4.txt', metavar='path_to_data',
+                        dest='filepath', help='Relative path to simulated data')
+    parser.add_argument('--print', action='store_true',
+                        help='Whether to print the calculated invariant masses to stdout.')
+    parser.add_argument('--parsed', action='store_true',
+                        help='Print parsing information to stdout.')
+    parser.add_argument('--hist', action='store_false',
+                        help="Don't show histogram")
+    args = parser.parse_args()
+
 
     events = []
 
-    with open(filepath) as data_file:
+    with open(args.filepath) as data_file:
         raw = data_file.read().split('\n')
 
         for i, line in enumerate(raw):
@@ -68,31 +75,37 @@ def main():
         if len(event) > 2:
             raise ValueError
 
-
+    # Calculate all the invariant masses and save them
     invariant_masses = []
     for event in events:
         invariant_masses.append(event.invariant_mass())
 
-    #for event in events:
-    #    print(event.momenta)
-    #    print('Event', event.id)
-    #    for momenta in event.momenta:
-    #        print('Energy:', momenta.energy)
-    #        print('p_T:', momenta.transverse())
+    if args.print:
+        for mass in invariant_masses:
+            print(mass)
 
-    #    print('Invariant mass:', invariant_mass)
+    if args.parsed:
+        for event in events:
+            print(event.momenta)
+            print('Event', event.id)
+            for momenta in event.momenta:
+                print('Energy:', momenta.energy)
+                print('p_T:', momenta.transverse())
+
+            print('Invariant mass:', invariant_mass)
 
 
-    weights = list(map(lambda x: 0.1, invariant_masses))
+    if args.hist:
+        weights = list(map(lambda x: 0.1, invariant_masses))
 
-    n, bins, patches = plt.hist(invariant_masses, 1000, normed=True,
-            weights=weights, facecolor='b', alpha=0.75)
-    plt.xlabel('Invariant Mass (GeV/c^2)')
-    plt.ylabel('Frequency')
-    plt.title('Histogram of invariant masses')
-    plt.axis([100, 200, 0, 0.1])
-    plt.grid(True)
-    plt.show()
+        n, bins, patches = plt.hist(invariant_masses, 1000, normed=True,
+                weights=weights, facecolor='b', alpha=0.75)
+        plt.xlabel('Invariant Mass (GeV/c^2)')
+        plt.ylabel('Frequency')
+        plt.title('Histogram of invariant masses')
+        plt.axis([100, 200, 0, 0.1])
+        plt.grid(True)
+        plt.show()
 
 
 if __name__ == '__main__':
