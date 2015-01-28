@@ -34,29 +34,40 @@ def energy_threshold(events, E):
         event.momenta = list(filter(lambda x: x.energy > E, event.momenta))
     return events
 
+def parse_file(path):
+    events = []
+
+    with open(path) as data_file:
+        raw = data_file.read().split('\n')
+
+        # TODO: Need to make this faster
+        for i, line in enumerate(raw):
+            # If the line starts with 'Event', begin to process it
+            if line.startswith('Event'):
+                # TODO: Dispatch job here!
+                events.append(Event.from_text(raw[i:]))
+
+    return events
+
+
 def main():
     parser = argparse.ArgumentParser(description='Generate histogram from Higgs event data')
-    parser.add_argument('-f', nargs=1, default='Higgs_1e4.txt', metavar='path_to_data',
-                        dest='filepath', help='Relative path to simulated data')
+    parser.add_argument('--higgs', nargs=1, default='Higgs_1e4.txt', metavar='path_to_higgs',
+                        dest='higgs_path', help='Relative path to higgs data')
+    parser.add_argument('--background', nargs=1, default='background.txt', metavar='path_to_background',
+                        dest='background_path', help='Relative path to background data')
     parser.add_argument('--print', action='store_true',
                         help='Whether to print the calculated invariant masses to stdout.')
     parser.add_argument('--parsed', action='store_true',
                         help='Print parsing information to stdout.')
+    parser.add_argument('--counter', nargs=1, default=100, type=int, metavar='n',
+                        help='Print every n calculations')
     parser.add_argument('--hist', action='store_false',
                         help="Don't show histogram")
     args = parser.parse_args()
 
-
-    events = []
-
-    with open(args.filepath) as data_file:
-        raw = data_file.read().split('\n')
-
-        for i, line in enumerate(raw):
-            # If the line starts with 'Event', begin to process it
-            if line.startswith('Event'):
-                events.append(Event.from_text(raw[i:]))
-
+    events = parse_file(args.higgs_path)
+    events += parse_file(args.background_path)
 
     #Filtering events
     events = energy_threshold(events, 40)
@@ -77,7 +88,12 @@ def main():
 
     # Calculate all the invariant masses and save them
     invariant_masses = []
-    for event in events:
+    counter = 0
+    for i, event in enumerate(events):
+        counter += 1
+        if counter % args.count == 0:
+            print(i)
+
         invariant_masses.append(event.invariant_mass())
 
     if args.print:
