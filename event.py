@@ -29,7 +29,7 @@ class Event:
                     #will be a small(ish) list
                     diff.append(abs(self.momenta[i].azimuthal() - self.momenta[j].azimuthal()))
 
-                                   
+
         table = [[0, 1],[0, 2],[1,2],[0,3],[1,3],[2,3],[0,4], [1,4], [2,4],[3,4],[0,5],[1,5],[2,5], [3,5], [4,5], [0,6],[1,6],[2,6],[3,6]]
         smallest = sorted(diff)[0]
         print(diff.index(smallest))
@@ -38,7 +38,7 @@ class Event:
         for i in ind:
             momenta.append(self.momenta[i])
         self.momenta = momenta
-            
+
     def invariant_mass(self):
         """ Calculate the invariant mass from the four momenta. """
         a = FourMomentum([0,0,0], 0)
