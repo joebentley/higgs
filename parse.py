@@ -71,7 +71,7 @@ def parse_file(path, count=False):
         raw = data_file.read().split('\n')
 
         #counter = 0
-        p = Pool(50)
+        p = Pool(100)
         for i, line in enumerate(raw):
             # If the line starts with 'Event', begin to process it
             if line.startswith('Event'):
