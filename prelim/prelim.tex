@@ -1,17 +1,19 @@
 \documentclass{article}
 \title{Preliminary Report}
-\author{Joe Bentley and Jake Lane}
+\author{Jake Lane}
 \usepackage{amsmath, graphicx}
 \begin{document}
+\maketitle
 \section{Introduction}
 This report outlines the aims of the project, the physics behind detecting a Higgs signal amongst background data and the initial planning as well as alternatives to problems.
 \section{Theoretical Background}
 \subsection{Higgs Mechanism}
-The Higgs mechanism is an electroweak process that conserves the gauge symmetry of the Lagrangian (density) of the standard model of particle physics, whilst still giving rise to mass terms to occur in each particle in the SM.
+The Higgs mechanism is an electroweak process that gives rise to mass terms to occur in each particle in the SM, which would otherwise have no mass.
 \subsection{Higgs Production}
-The dominant production mode (88\% of produced Higgs) for Higgs bosons is 'gluon fusion' $gg \rightarrow H$  (referred to as ggF.) 
+The dominant production mode (88\% of produced Higgs) for Higgs bosons is 'gluon fusion' $gg \rightarrow H$  (referred to as ggF.) This is followed by fusion of vector bosons (such as $W^+ W^-$) called vector Boson fusion
 \subsection{Higgs Decay}
 Higgs decay into 2 photons via a heavy quark (top) loop. The nature of this decay (involving 3 vertices) mean that the branching ratio is orders of magnitude lower than other decays (such as that to $b \bar{b}$ pairs)
+The reason that the diphoton channel is used is mostly for experimental ease, since detecting more common Higgs decays involve detecting quarks which will come in 'jets' which requires tools with a lower resolution for the Higgs mass (2-3GeV for $H \rightarrow \gamma \gamma$, 14-15GeV for $H \rightarrow b {\bar{b}}$) \cite[p.~2]{diphotosig}
 \begin{equation}
 H \rightarrow \gamma \gamma
 \end{equation}
@@ -40,7 +42,7 @@ The invariant masses of the diphoton systems in each event are calculated using
 \begin{equation}
 M_{\gamma \gamma}^2 = (E_{\gamma 1} + E_{\gamma 2})^2 - ({\bf p}_{\gamma 1} + {\bf p}_{\gamma 2})^2
 \end{equation}
-Since this is the invariant mass from a Higgs decay, this invariant mass (if a Higgs particle decayed into this system) should be present more often at $M_{\gamma \gamma} = M_{H}$. Where the (as of yet) best estimate for $M_{H} = 125.8$ GeV
+Since this is the invariant mass from a Higgs decay, this invariant mass (if a Higgs particle decayed into this system) should be present more often at $M_{\gamma \gamma} = M_{H}$. Where the estimate for $M_{H} = 126.0 \pm 0.8$ GeV \cite[p.~1]{higgs2012}
 \subsection{Weightings}
 The Higgs signals (Higgs to diphoton) must be weighted by accounting for the probability that a Higgs is produced and that it decays into 2 photons. This is compared to the probability of getting a background signal of getting diphoton.
 \begin{equation}
@@ -56,4 +58,36 @@ The project will use the following to look for a Higgs signal:
 \item Plot the histogram of these invariant masses
 \item Compare the peak (or lack of one) with the literature
 \end{enumerate}
+\begin{thebibliography}{9}
+
+%\cite{Aad:2012tfa}
+\bibitem{higgs2012}
+  G.~Aad {\it et al.}  [ATLAS Collaboration],
+  %``Observation of a new particle in the search for the Standard Model Higgs boson with the ATLAS detector at the LHC,''
+  Phys.\ Lett.\ B {\bf 716} (2012) 1
+  [arXiv:1207.7214 [hep-ex]].
+  %%CITATION = ARXIV:1207.7214;%%
+  %3920 citations counted in INSPIRE as of 30 Jan 2015
+  
+ %\cite{DiazCruz:2003bx}
+\bibitem{diphotosig}
+  J.~L.~Diaz-Cruz, D.~K.~Ghosh and S.~Moretti,
+  %``The Diphoton signature of Higgs bosons in GMSB models at the CERN LHC,''
+  Phys.\ Rev.\ D {\bf 68} (2003) 014019
+  [hep-ph/0303251].
+  %%CITATION = HEP-PH/0303251;%%
+  %8 citations counted in INSPIRE as of 30 Jan 2015
+
+%\cite{Dittmaier:2011ti}
+\bibitem{higgscrosssection1}
+  S.~Dittmaier {\it et al.}  [LHC Higgs Cross Section Working Group Collaboration],
+  %``Handbook of LHC Higgs Cross Sections: 1. Inclusive Observables,''
+  arXiv:1101.0593 [hep-ph].
+  %%CITATION = ARXIV:1101.0593;%%
+  %849 citations counted in INSPIRE as of 30 Jan 2015
+
+
+\end{thebibliography}
+
 \end{document}
+
