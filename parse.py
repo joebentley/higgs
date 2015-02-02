@@ -79,11 +79,7 @@ def parse_file(path, count=False):
                 p.apply_async(events.append(Event.from_text(raw[i:i+10])))
                 #events.append(Event.from_text(raw[i:i+10]))
 
-                if count:
-                    counter += 1
-                    if counter % 1000 == 0:
-                        print(counter)
-
+                
     return events
 
 
@@ -114,11 +110,11 @@ def main():
     invariant_masses_higgs = get_invariant_masses(higgs_events)
     #Comment out the background if you want to change functions etc.
     #Background (comment out all 3 lines to do quick work)
-    ''''bkg_events = parse_file(args.background_path, count=args.count)
+    bkg_events = parse_file(args.background_path, count=args.count)
     bkg_events = combined_filter(bkg_events)
     invariant_masses_bkg = get_invariant_masses(bkg_events)
     #Much more clear filtering by using a function
-    invariant_masses_combined = invariant_masses_higgs + invariant_masses_bkg'''
+    invariant_masses_combined = invariant_masses_higgs + invariant_masses_bkg
 
     if args.print_higgs:
         for mass in invariant_masses_higgs:
@@ -150,11 +146,11 @@ def main():
 
     if args.outputIM:
         out_higgs = open('outputIM_Higgs.txt', 'w')
-        #out_bkg = open('outputIM_bkg.txt', 'w')
-        #out_comb = open('outputIM_cmb.txt', 'w')
+        out_bkg = open('outputIM_bkg.txt', 'w')
+        out_comb = open('outputIM_cmb.txt', 'w')
         out_higgs.write(str(invariant_masses_higgs))
-        #out_bkg.write(str(invariant_masses_bkg))
-        #out_comb.write(str(invariant_masses_combined))
+        out_bkg.write(str(invariant_masses_bkg))
+        out_comb.write(str(invariant_masses_combined))
          
 
 if __name__ == '__main__':
