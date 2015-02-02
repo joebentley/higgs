@@ -4,7 +4,8 @@
 
 __pycache__
 *.pyc
-
+*~
+*#
 background.txt
 
 Thumbs.db
