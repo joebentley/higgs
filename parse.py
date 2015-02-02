@@ -162,7 +162,8 @@ def main():
         weights_bkg = list(map(lambda x: 1, invariant_masses_bkg))
 
         # Combine weights for the combined invariant mass plot
-        weights_combined = weights + weights_bkg
+        #weights_combined = weights + weights_bkg
+        weights_combined = list(map(lambda x: 1, invariant_masses_combined))
 
         n, bins, patches = plt.hist(invariant_masses_higgs, 1000, normed=True,
                 weights=weights, facecolor='b', alpha=0.75, label='Higgs')
