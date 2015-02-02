@@ -39,20 +39,20 @@ def energy_threshold(events, E):
 def combined_filter(events):
      #Filtering events
     res = energy_threshold(events, 40)
- 
+
     #One photon with transverse momentum > 20GeV
     res = transverse_threshold(res, 20)
-   
+
     #The other photon with p_T >40GeV
     res = transverse_threshold_2(res, 40)
- 
+
     #only show events with at least 2 momenta
     res = number_threshold(res, 1)
 
     for event in res:
         event.filter_highest(2)
         #event.filter_2_angles()
-    
+
     for event in res:
         if len(event) > 2:
             raise ValueError
@@ -71,7 +71,7 @@ def parse_file(path, count=False):
         raw = data_file.read().split('\n')
 
         #counter = 0
-        p = Pool(500)
+        p = Pool(100)
         for i, line in enumerate(raw):
             # If the line starts with 'Event', begin to process it
             if line.startswith('Event'):
@@ -118,15 +118,15 @@ def main():
     invariant_masses_bkg = get_invariant_masses(bkg_events)
     #Much more clear filtering by using a function
     invariant_masses_combined = invariant_masses_higgs + invariant_masses_bkg
-    
+
     if args.print_higgs:
         for mass in invariant_masses_higgs:
             print(mass)
-            
+
     if args.print_bkg:
         for mass in invariant_masses_bkg:
             print(mass)
-    
+
     if args.parsed_higgs:
         for event in higgs_events:
             print(event.momenta)
@@ -155,16 +155,16 @@ def main():
         weights = list(map(lambda x: w, invariant_masses_higgs))
         weights_bkg = list(map(lambda x: 1, invariant_masses_bkg))
         weights_combined = list(map(lambda x: 1, invariant_masses_combined))
-        n, bins, patches = plt.hist(invariant_masses_higgs, 1000, normed=True,
-                weights=weights, facecolor='b', alpha=0.75, label='Higgs')
-        n, bins, patches = plt.hist(invariant_masses_bkg, 1000, normed=True, weights = weights_bkg,
-                                    facecolor='g', alpha=0.75, label='Background')
-        n, bins, patches = plt.hist(invariant_masses_combined, 1000, normed = True, weights = weights_combined,
+        #n, bins, patches = plt.hist(invariant_masses_higgs, 1000, normed=False,
+                 #weights=weights, facecolor='b', alpha=0.75, label='Higgs')
+        #n, bins, patches = plt.hist(invariant_masses_bkg, 1000, normed=False, weights = weights_bkg,
+                                    #facecolor='g', alpha=0.75, label='Background')
+        n, bins, patches = plt.hist(invariant_masses_combined, 1000, normed = False, weights = weights_combined,
                                     facecolor = 'r', alpha = 0.75, label = 'Combined')
         plt.xlabel('Invariant Mass (GeV/c^2)')
         plt.ylabel('Frequency')
         plt.title('Histogram of invariant masses')
-        plt.axis([100, 200, 0, 0.1])
+        #plt.axis([100, 200, 0, 0.1])
         plt.grid(True)
         plt.legend(loc = 'upper right')
         plt.show()
