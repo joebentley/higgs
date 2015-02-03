@@ -64,19 +64,45 @@ def get_invariant_masses(events):
         invariant_masses.append(event.invariant_mass())
     return invariant_masses
 
-def parse_file(path, count=False):
+def parse_file(path, count=False, momenta_in_event=False):
+    """ Parse the event file with name path returning Event objects.
+
+        Keyword arguments:
+        path  -- The filepath of the event file
+        count -- Whether to print the current num. processed events
+        momenta_in_event -- Whether to use file containing num. four
+                            momenta in each event.
+
+        The four momenta count file should have the filename path + '_count'
+        and each line should contain the number of four momenta in each
+        event of the events file (as specified in the path argument) in
+        order of event appearance (the first number in the count file
+        has the number of four momenta in the first event of the events file)."""
 
     events = []
     with open(path) as data_file:
         raw = data_file.read().split('\n')
 
-        #counter = 0
+        if momenta_in_event:
+            count_file = open(path + '_count')
+            counts = count_file.read().split('\n')
+            # Current event number in file
+            current_event_number = 0
+
+        counter = 0
         p = Pool(100)
         for i, line in enumerate(raw):
             # If the line starts with 'Event', begin to process it
             if line.startswith('Event'):
-                # Only use next 10 lines
-                p.apply_async(events.append(Event.from_text(raw[i:i+10])))
+                # If number of momenta given, use that, else just use 20
+                if momenta_in_event:
+                    count = int(counts[current_event_number])
+                    current_event_number += 1
+                else:
+                    count = 20
+
+                new_event = Event.from_text(raw[i+1:i+count])
+                p.apply_async(events.append(new_event))
                 #events.append(Event.from_text(raw[i:i+10]))
 
 
@@ -99,21 +125,24 @@ def main():
                         help='Print parsing information of background to stdout.')
     parser.add_argument('--count', action='store_true',
                         help='Whether to print current line of parsing.')
-    parser.add_argument('--outputIM', action='store_false',
-                        help="Don't show histogram.")
+    parser.add_argument('--momenta_count_in_event', action='store_true',
+        help="""Use files which hold the number of events in the event,
+                with the name of the datafile + '_count'.""")
 
     args = parser.parse_args()
 
-    #Higgs signal
-    higgs_events = parse_file(args.higgs_path, count=args.count)
+    # Higgs signal
+    higgs_events = parse_file(args.higgs_path, count=args.count,
+            momenta_in_event=args.momenta_count_in_event)
     higgs_events = combined_filter(higgs_events)
     invariant_masses_higgs = get_invariant_masses(higgs_events)
     #Comment out the background if you want to change functions etc.
-    #Background (comment out all 3 lines to do quick work)
-    bkg_events = parse_file(args.background_path, count=args.count)
+    # Background (comment out all 3 lines to do quick work)
+    bkg_events = parse_file(args.background_path, count=args.count,
+            momenta_in_event=args.momenta_count_in_event)
     bkg_events = combined_filter(bkg_events)
     invariant_masses_bkg = get_invariant_masses(bkg_events)
-    #Much more clear filtering by using a function
+    # Much more clear filtering by using a function
     invariant_masses_combined = invariant_masses_higgs + invariant_masses_bkg
 
     if args.print_higgs:
@@ -144,13 +173,12 @@ def main():
 
             print('Invariant mass:', invariant_mass)
 
-    if args.outputIM:
-        out_higgs = open('outputIM_Higgs.txt', 'w')
-        out_bkg = open('outputIM_bkg.txt', 'w')
-        out_comb = open('outputIM_cmb.txt', 'w')
-        out_higgs.write(str(invariant_masses_higgs))
-        out_bkg.write(str(invariant_masses_bkg))
-        out_comb.write(str(invariant_masses_combined))
+    out_higgs = open('outputIM_Higgs.txt', 'w')
+    out_bkg = open('outputIM_bkg.txt', 'w')
+    out_comb = open('outputIM_cmb.txt', 'w')
+    out_higgs.write(str(invariant_masses_higgs))
+    out_bkg.write(str(invariant_masses_bkg))
+    out_comb.write(str(invariant_masses_combined))
 
 
 if __name__ == '__main__':
