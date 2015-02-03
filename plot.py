@@ -6,8 +6,8 @@ def parse_file(path, count=False):
         raw = data_file.read().replace('[', '').replace(']', '').split(',')
         raw = list(map(lambda x: float(x), raw))
     return raw
-        
-    
+
+
 
 def main():
     parser = argparse.ArgumentParser(description = 'Generate histogram')
@@ -34,7 +34,7 @@ def main():
     if args.combined:
         n, bins, patches = plt.hist(invariant_masses_combined, 1000, normed = True, weights = weights_combined,
                                 facecolor = 'r', alpha = 0.75, label = 'Combined')
-   
+
     plt.xlabel('Invariant Mass (GeV/c^2)')
     plt.ylabel('Frequency')
     plt.title('Histogram of invariant masses')

@@ -79,7 +79,7 @@ def parse_file(path, count=False):
                 p.apply_async(events.append(Event.from_text(raw[i:i+10])))
                 #events.append(Event.from_text(raw[i:i+10]))
 
-                
+
     return events
 
 
@@ -101,7 +101,7 @@ def main():
                         help='Whether to print current line of parsing.')
     parser.add_argument('--outputIM', action='store_false',
                         help="Don't show histogram.")
-    
+
     args = parser.parse_args()
 
     #Higgs signal
@@ -151,7 +151,7 @@ def main():
         out_higgs.write(str(invariant_masses_higgs))
         out_bkg.write(str(invariant_masses_bkg))
         out_comb.write(str(invariant_masses_combined))
-         
+
 
 if __name__ == '__main__':
     main()
