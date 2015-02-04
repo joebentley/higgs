@@ -89,22 +89,28 @@ def parse_file(path, count=False, momenta_in_event=False):
             # Current event number in file
             current_event_number = 0
 
-        count = 0
+        four_momenta_count = 0
+        counter = 0
         p = Pool(100)
         for i, line in enumerate(raw):
             # If the line starts with 'Event', begin to process it
             if line.startswith('Event'):
                 # If number of momenta given, use that, else just use 20
                 if momenta_in_event:
-                    count = int(counts[current_event_number])
+                    four_momenta_count = int(counts[current_event_number])
                     current_event_number += 1
                 else:
-                    count = 20
+                    four_momenta_count = 20
 
-                new_event = Event.from_text(raw[i+1:i+count])
-                #print(new_event)
+                new_event = Event.from_text(raw[i+1:i+four_momenta_count])
                 p.apply_async(events.append(new_event))
                 #events.append(Event.from_text(raw[i:i+10]))
+
+                if count:
+                    counter += 1
+                    if counter % 1000 == 0:
+                        print(counter)
+
 
 
     return events
