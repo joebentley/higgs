@@ -11,6 +11,12 @@ def parse_file(path, count=False):
 
 
 def main():
+    parser = argparse.ArgumentParser(description = 'Generate histogram from Higgs and background data')
+    parser.add_argument('--not_comb', action = 'store_false', help='Do not plot the combined data')
+    parser.add_argument('--higgs', action = 'store_true', help = 'Plots the histogram frmo only the Higgs signal')
+    parser.add_argument('--bkg', action = 'store_true', help = 'Plots the histogram from only the background')
+    parser.add_argument('--norm', action = 'store_true', help = 'Normalise all plots')
+    args = parser.parse_args()
     cs_higgs = 17.35
     bf_yy = 2.28e-3
     cs_bkg = 140
@@ -30,11 +36,22 @@ def main():
     hist_higgs = list(map(lambda x: x*w_higgs, hist_higgs))
     hist_bkg = list(map(lambda x: x*w_bkg, hist_bkg))
     hist_comb = list(map(lambda x, y: x + y, hist_higgs, hist_bkg)) 
-    
-    sum_hist_comb = float(sum(hist_comb))
+    bins = bins[0:len(bins) - 1]
+    sum_comb = float(sum(hist_comb))
     #hist_comb = list(map(lambda x: x/sum_hist_comb, hist_comb))
-    plt.bar(bins[0:len(bins) - 1], hist_comb)
-    #plt.bar(bins[0:len(bins) - 1], hist_higgs)
+    if args.norm:
+        hist_higgs = list(map(lambda x: x/sum_higgs, hist_higgs))
+        hist_bkg = list(map(lambda x: x/sum_bkg, hist_bkg))
+        hist_comb = list(map(lambda x: x/sum_comb, hist_comb))
+    if args.not_comb:
+        plt.bar(bins, hist_comb)
+        
+    if args.higgs:
+        plt.bar(bins, hist_higgs)
+        
+    if args.bkg:
+        plt.bar(bins, hist_bkg)
+        
     plt.xlabel('Invariant Mass (GeV/c^2)')
     plt.ylabel('Frequency')
     plt.title('Histogram of invariant masses')
