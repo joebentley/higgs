@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import matplotlib.pyplot as plt
 import sys, argparse
 import numpy as np
@@ -35,7 +37,7 @@ def main():
     sum_bkg = float(sum(hist_bkg))
     hist_higgs = list(map(lambda x: x*w_higgs, hist_higgs))
     hist_bkg = list(map(lambda x: x*w_bkg, hist_bkg))
-    hist_comb = list(map(lambda x, y: x + y, hist_higgs, hist_bkg)) 
+    hist_comb = list(map(lambda x, y: x + y, hist_higgs, hist_bkg))
     bins = bins[0:len(bins) - 1]
     sum_comb = float(sum(hist_comb))
     #hist_comb = list(map(lambda x: x/sum_hist_comb, hist_comb))
@@ -45,13 +47,13 @@ def main():
         hist_comb = list(map(lambda x: x/sum_comb, hist_comb))
     if args.not_comb:
         plt.bar(bins, hist_comb, label = 'Higgs + Background')
-        
+
     if args.higgs:
         plt.bar(bins, hist_higgs, label = 'Higgs')
-        
+
     if args.bkg:
         plt.bar(bins, hist_bkg, label = 'Background')
-        
+
     plt.xlabel('$m_{\gamma \gamma}$ (GeV/$c^2$)')
     plt.ylabel('Frequency')
     plt.title('Histogram of invariant masses')
