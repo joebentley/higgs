@@ -118,7 +118,7 @@ def parse_file(path, count=False, momenta_in_event=False):
 
 def main():
     parser = argparse.ArgumentParser(description='Generate histogram from Higgs event data')
-    parser.add_argument('--higgs', nargs=1, default='Higgs_1e4.txt', metavar='path_to_higgs',
+    parser.add_argument('--higgs', nargs=1, default='higgs.txt', metavar='path_to_higgs',
                         dest='higgs_path', help='Relative path to higgs data')
     parser.add_argument('--background', nargs=1, default='background.txt', metavar='path_to_background',
                         dest='background_path', help='Relative path to background data')
