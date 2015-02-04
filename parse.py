@@ -89,7 +89,7 @@ def parse_file(path, count=False, momenta_in_event=False):
             # Current event number in file
             current_event_number = 0
 
-        counter = 0
+        count = 0
         p = Pool(100)
         for i, line in enumerate(raw):
             # If the line starts with 'Event', begin to process it
@@ -102,6 +102,7 @@ def parse_file(path, count=False, momenta_in_event=False):
                     count = 20
 
                 new_event = Event.from_text(raw[i+1:i+count])
+                #print(new_event)
                 p.apply_async(events.append(new_event))
                 #events.append(Event.from_text(raw[i:i+10]))
 
@@ -125,7 +126,7 @@ def main():
                         help='Print parsing information of background to stdout.')
     parser.add_argument('--count', action='store_true',
                         help='Whether to print current line of parsing.')
-    parser.add_argument('--momenta_count_in_event', action='store_true',
+    parser.add_argument('--momenta_count_in_event', action='store_false',
         help="""Use files which hold the number of events in the event,
                 with the name of the datafile + '_count'.""")
 
