@@ -15,7 +15,12 @@ def main():
     parser.add_argument('--higgs', action = 'store_true', help = 'Plots the histogram frmo only the Higgs signal')
     parser.add_argument('--bkg', action = 'store_true', help = 'Plots the histogram from only the background')
     parser.add_argument('--norm', action = 'store_true', help = 'Normalise all plots')
+    parser.add_argument('--ratio', action = 'store_true', help = 'Use ratio to calculate the weights of higgs and bkgs.')
     args = parser.parse_args()
+
+    invariant_masses_higgs = parse_file('outputIM_Higgs.txt')
+    invariant_masses_bkg = parse_file('outputIM_bkg.txt')
+    invariant_masses_combined = parse_file('outputIM_cmb.txt')
 
     cs_higgs = 17.35
     bf_yy = 2.28e-3
@@ -23,12 +28,16 @@ def main():
     w_higgs = cs_higgs * bf_yy
     w_bkg = cs_bkg
 
+    if args.ratio:
+        ratio = (w_higgs / w_bkg) * len(invariant_masses_bkg)
+        print('Expected num. Higgs events:', int(ratio))
+        print('Actual num. Higgs events:  ', len(invariant_masses_higgs))
+
+        w_higgs = ratio / len(invariant_masses_higgs)
+        w_bkg = 1
+
     print('Higgs weighting:', w_higgs)
     print('Backr weighting:', w_bkg)
-
-    invariant_masses_higgs = parse_file('outputIM_Higgs.txt')
-    invariant_masses_bkg = parse_file('outputIM_bkg.txt')
-    invariant_masses_combined = parse_file('outputIM_cmb.txt')
 
     #Resolution of histogram
     res = 3

@@ -14,7 +14,7 @@ def number_threshold(events, n):
         n momenta are returned. """
     return list(filter(lambda x: len(x) > n, events))
 
-#Transverse  momentum filter
+#Transverse momentum filter
 def transverse_threshold(events, p_T):
     for event in events:
         event.momenta = list(filter(lambda x: x.transverse() > p_T, event.momenta))
@@ -37,7 +37,7 @@ def energy_threshold(events, E):
 
 #combined filter
 def combined_filter(events):
-     #Filtering events
+    #Filtering events
     res = energy_threshold(events, 40)
 
     #One photon with transverse momentum > 20GeV
