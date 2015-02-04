@@ -56,8 +56,11 @@ class FourMomentum:
     def from_line(line):
         """ Parse line of format "p_x p_y p_z E" into FourMomentum object. """
         line = line.split()
-        momentum = [float(line[0]), float(line[1]), float(line[2])]
-        energy = float(line[3])
+        momentum = [0,0,0]
+        energy = 0
+        if 'Event' not in line:
+            momentum = [float(line[0]), float(line[1]), float(line[2])]
+            energy = float(line[3])
         return FourMomentum(momentum, energy)
 
 
