@@ -2,7 +2,8 @@ from fourmomentum import FourMomentum
 from math import *
 
 class Event:
-    def __init__(self, momenta=None):
+    def __init__(self, id=0, momenta=None):
+        self.id = id
         self.momenta = momenta or []
 
     def __str__(self):
@@ -47,9 +48,9 @@ class Event:
         return sqrt(abs(b))
 
     @staticmethod
-    def from_text(four_momenta_lines):
-        """ Generate Event from looking through the string given
-            and turning each line of the string into a four momenta. """
+    def from_text(rest_of_file):
+        """ Generate Event from looking through the rest of the file
+            until another event is found. """
 
         event = Event()
 
@@ -57,7 +58,15 @@ class Event:
         momenta = []
 
         # Start looping through the rest of the lines
-        for momentum_line in four_momenta_lines:
+        for line_num, momentum_line in enumerate(rest_of_file):
+            # If the line starts with Event and we aren't on line 1, stop parsing
+            if momentum_line.startswith('Event'):
+                if line_num == 0:
+                    event.id = momentum_line.split()[1]
+                    continue
+                else:
+                    break
+
             # Ignore empty lines
             if len(momentum_line.strip()) == 0:
                 continue
