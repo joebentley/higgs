@@ -44,20 +44,21 @@ def main():
         hist_bkg = list(map(lambda x: x/sum_bkg, hist_bkg))
         hist_comb = list(map(lambda x: x/sum_comb, hist_comb))
     if args.not_comb:
-        plt.bar(bins, hist_comb)
+        plt.bar(bins, hist_comb, label = 'Higgs + Background')
         
     if args.higgs:
-        plt.bar(bins, hist_higgs)
+        plt.bar(bins, hist_higgs, label = 'Higgs')
         
     if args.bkg:
-        plt.bar(bins, hist_bkg)
+        plt.bar(bins, hist_bkg, label = 'Background')
         
-    plt.xlabel('Invariant Mass (GeV/c^2)')
+    plt.xlabel('$m_{\gamma \gamma}$ (GeV/$c^2$)')
     plt.ylabel('Frequency')
     plt.title('Histogram of invariant masses')
     #plt.axis([0, 200, 0, 0.1])
+    plt.xlim((0, 200))
     plt.grid(True)
-    plt.legend(loc = 'upper right')
+    plt.legend(loc = 'upper left')
     plt.show()
 
 if __name__ == '__main__':
