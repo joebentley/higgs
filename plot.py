@@ -11,13 +11,16 @@ def parse_file(path, count=False):
         raw = data_file.read().replace('[', '').replace(']', '').split(',')
         return list(map(float, raw))
         
-def fit_bkg(x, y, res=3, x_min=0, x_max=200, length = 100):
+def fit_bkg(x, y, res=3, x_min=120, x_max=150, length = 100):
     #Fit exp
     #Want a continuous function independant of resolution
     #This is the fitting resolution (make it large to be continuous)
+    x = x[:x_max/res]
+    y = y[:x_max/res]
     f = lambda x, a0, a1, a2, a3, a4: a0 + a1 * x + a2 * x**2 + a3 * x**3 + a4 * x**4
-    y_Res = opt.curve_fit(f, x, y)
-    coeff = y_Res[0]
+    #g = lambda x, n: x**n * exp(-x)
+    c = opt.curve_fit(f, x, y)[0]
+    #d = opt.curve_fit(g, x, y)[0]
     N = int(1e4)
     A = sorted(y)[-1]
     xmin = y.index(A)
@@ -27,8 +30,9 @@ def fit_bkg(x, y, res=3, x_min=0, x_max=200, length = 100):
     x_range = range(0,  N) 
     x_res = list(map(lambda x: (x_min + x * (x_max - x_min)/N), x_range))
     #y_res = list(map(lambda x: A* exp(-(x - x_min) * k), x_res))
-    y_res = list(map(lambda x: coeff[0] + coeff[1] * x + coeff[2] * x**2 + coeff[3] * x**3 + coeff[4] * x**4, x_res))
-
+    y_res = list(map(lambda x: f(x, c[0], c[1], c[2], c[3], c[4]), x_res))
+    #y_res = list(map(lambda x: g(x, c[0]), x_res))
+        
     return [x_res, y_res]
 
 def main():
@@ -91,7 +95,7 @@ def main():
         plt.bar(bins, hist_comb, label = 'Higgs + Background', color='b', width = res)
         
     if args.fit_bkg:
-        plt.plot(bkg_x, bkg_y, label = 'Background line')
+        plt.plot(bkg_x, bkg_y, label = 'Background line', color = 'r')
     
 
     if args.higgs:
