@@ -2,12 +2,34 @@
 
 import matplotlib.pyplot as plt
 import sys, argparse
+from math import *
 import numpy as np
+import scipy.optimize as opt
 
 def parse_file(path, count=False):
     with open(path) as data_file:
         raw = data_file.read().replace('[', '').replace(']', '').split(',')
         return list(map(float, raw))
+        
+def fit_bkg(x, y, res=3, x_min=0, x_max=200, length = 100):
+    #Fit exp
+    #Want a continuous function independant of resolution
+    #This is the fitting resolution (make it large to be continuous)
+    f = lambda x, a0, a1, a2, a3, a4: a0 + a1 * x + a2 * x**2 + a3 * x**3 + a4 * x**4
+    y_Res = opt.curve_fit(f, x, y)
+    coeff = y_Res[0]
+    N = int(1e4)
+    A = sorted(y)[-1]
+    xmin = y.index(A)
+    xmax = xmin + length
+    #x_min to x_max - so piecewise could be done.
+    #k = log(y[x_min]/y[x_max])/float(x_max)
+    x_range = range(0,  N) 
+    x_res = list(map(lambda x: (x_min + x * (x_max - x_min)/N), x_range))
+    #y_res = list(map(lambda x: A* exp(-(x - x_min) * k), x_res))
+    y_res = list(map(lambda x: coeff[0] + coeff[1] * x + coeff[2] * x**2 + coeff[3] * x**3 + coeff[4] * x**4, x_res))
+
+    return [x_res, y_res]
 
 def main():
     parser = argparse.ArgumentParser(description = 'Generate histogram from Higgs and background data')
@@ -16,6 +38,7 @@ def main():
     parser.add_argument('--bkg', action = 'store_true', help = 'Plots the histogram from only the background')
     parser.add_argument('--norm', action = 'store_true', help = 'Normalise all plots')
     parser.add_argument('--ratio', action = 'store_true', help = 'Use ratio to calculate the weights of higgs and bkgs.')
+    parser.add_argument('--fit_bkg', action = 'store_false', help = 'Plot line of background when doing combined.')
     args = parser.parse_args()
 
     invariant_masses_higgs = parse_file('outputIM_Higgs.txt')
@@ -50,6 +73,8 @@ def main():
     hist_bkg = list(map(lambda x: x*w_bkg, hist_bkg))
     hist_comb = list(map(lambda x, y: x + y, hist_higgs, hist_bkg))
 
+    
+
     bins = bins[0:len(bins) - 1]
     #hist_comb = list(map(lambda x: x/sum_hist_comb, hist_comb))
     if args.norm:
@@ -60,14 +85,20 @@ def main():
         hist_bkg = list(map(lambda x: x/sum_bkg, hist_bkg))
         hist_comb = list(map(lambda x: x/sum_comb, hist_comb))
 
+    bkg_x, bkg_y = fit_bkg(bins, hist_bkg, res)
+
     if not args.not_comb:
-        plt.bar(bins, hist_comb, label = 'Higgs + Background', color='b')
+        plt.bar(bins, hist_comb, label = 'Higgs + Background', color='b', width = res)
+        
+    if args.fit_bkg:
+        plt.plot(bkg_x, bkg_y, label = 'Background line')
+    
 
     if args.higgs:
-        plt.bar(bins, hist_higgs, label = 'Higgs', color='r')
+        plt.bar(bins, hist_higgs, label = 'Higgs', color='r', width = res)
 
     if args.bkg:
-        plt.bar(bins, hist_bkg, label = 'Background', color='g')
+        plt.bar(bins, hist_bkg, label = 'Background', color='g', width = res)
 
     plt.xlabel('$m_{\gamma \gamma}$ (GeV/$c^2$)')
     plt.ylabel('Frequency')
