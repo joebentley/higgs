@@ -25,6 +25,7 @@ def transverse_threshold_2(events, p_T):
     events2 = []
     for event in events:
         for momenta in event.momenta:
+            # If there are any transverse momenta > p_T, that event is valid
             if momenta.transverse() > p_T:
                 events2.append(event)
     return events2
@@ -36,18 +37,18 @@ def energy_threshold(events, E):
     return events
 
 #combined filter
-def combined_filter(events):
+def combined_filter(events, num=1, momentum_lower=20, momentum_higher=40, energy=20):
     #Filtering events
-    res = energy_threshold(events, 40)
+    res = energy_threshold(events, energy)
 
     #One photon with transverse momentum > 20GeV
-    res = transverse_threshold(res, 20)
+    res = transverse_threshold(res, momentum_lower)
 
     #The other photon with p_T >40GeV
-    res = transverse_threshold_2(res, 40)
+    res = transverse_threshold_2(res, momentum_higher)
 
     #only show events with at least 2 momenta
-    res = number_threshold(res, 1)
+    res = number_threshold(res, num)
 
     for event in res:
         event.filter_highest(2)
@@ -111,9 +112,8 @@ def parse_file(path, count=False, momenta_in_event=False):
                     if counter % 1000 == 0:
                         print(counter)
 
-
-
     return events
+
 
 
 def main():
@@ -133,8 +133,12 @@ def main():
     parser.add_argument('--count', action='store_true',
                         help='Whether to print current line of parsing.')
     parser.add_argument('--momenta_count_in_event', action='store_false',
-        help="""Use files which hold the number of events in the event,
+        help="""Don't use files which hold the number of events in the event,
                 with the name of the datafile + '_count'.""")
+    parser.add_argument('--onlyhiggs', action='store_true',
+        help="""Only use the Higgs file (don't parse the background)""")
+
+
 
     args = parser.parse_args()
 
@@ -145,12 +149,15 @@ def main():
     invariant_masses_higgs = get_invariant_masses(higgs_events)
     #Comment out the background if you want to change functions etc.
     # Background (comment out all 3 lines to do quick work)
-    bkg_events = parse_file(args.background_path, count=args.count,
-            momenta_in_event=args.momenta_count_in_event)
-    bkg_events = combined_filter(bkg_events)
-    invariant_masses_bkg = get_invariant_masses(bkg_events)
-    # Much more clear filtering by using a function
-    invariant_masses_combined = invariant_masses_higgs + invariant_masses_bkg
+
+    if not args.onlyhiggs:
+        bkg_events = parse_file(args.background_path, count=args.count,
+                momenta_in_event=args.momenta_count_in_event)
+        bkg_events = combined_filter(bkg_events)
+        invariant_masses_bkg = get_invariant_masses(bkg_events)
+        invariant_masses_combined = invariant_masses_higgs + invariant_masses_bkg
+    else:
+        invariant_masses_combined = invariant_masses_higgs
 
     if args.print_higgs:
         for mass in invariant_masses_higgs:
@@ -180,13 +187,14 @@ def main():
 
             print('Invariant mass:', invariant_mass)
 
-    out_higgs = open('outputIM_Higgs.txt', 'w')
-    out_bkg = open('outputIM_bkg.txt', 'w')
-    out_comb = open('outputIM_cmb.txt', 'w')
-    out_higgs.write(str(invariant_masses_higgs))
-    out_bkg.write(str(invariant_masses_bkg))
-    out_comb.write(str(invariant_masses_combined))
-
+    if args.onlyhiggs:
+        out_higgs = open('outputIM_Higgs.txt', 'w')
+        out_higgs.write(str(invariant_masses_higgs))
+    else:
+        out_bkg = open('outputIM_bkg.txt', 'w')
+        out_bkg.write(str(invariant_masses_bkg))
+        out_comb = open('outputIM_cmb.txt', 'w')
+        out_comb.write(str(invariant_masses_combined))
 
 if __name__ == '__main__':
     main()
