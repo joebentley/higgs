@@ -15,8 +15,8 @@ def fit_bkg(x, y, res=3, x_min=120, x_max=150, length = 100):
     #Fit exp
     #Want a continuous function independant of resolution
     #This is the fitting resolution (make it large to be continuous)
-    x = x[:x_max/res]
-    y = y[:x_max/res]
+    x = x[:int(x_max/res)]
+    y = y[:int(x_max/res)]
     f = lambda x, a0, a1, a2, a3, a4: a0 + a1 * x + a2 * x**2 + a3 * x**3 + a4 * x**4
     #g = lambda x, n: x**n * exp(-x)
     c = opt.curve_fit(f, x, y)[0]
