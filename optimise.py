@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 #Take the differences between the m_yy for higgs signal and for bkg signal.
 #Using lots of filters.
 
@@ -8,6 +10,8 @@
 #d. eta cuts
 
 
+from math import sqrt
+
 import sys, argparse
 import matplotlib.pyplot as plt
 import numpy as np
@@ -17,6 +21,12 @@ from fourmomentum import FourMomentum
 from event import Event
 
 import parse
+
+
+def statistical_significance(signal, background):
+    """ Calculate statistical significance given num. signal events
+        and num. background events. """
+    return signal / sqrt(signal + background)
 
 
 '''Want to have 4 2D arrays to optimize the cuts'''
@@ -33,10 +43,10 @@ def main():
                         help='2D plot for pseudorapidity')
 
     args = parser.parse_args()
-    
+
     #1. Get the raw events
-    higgs_events = parse.parse_file('Higgs_1e4.txt', event_in_momenta = True)
-    #bkg_events = parse.parse_file('background.txt', event_in_momenta = True)
+    higgs_events = parse.parse_file('higgs.txt', momenta_in_event=True)
+    #bkg_events = parse.parse_file('background.txt', momenta_in_event=True)
     #2 Always use the number filter
     higgs_events = parse.number_threshold(higgs_events, 1)
     #bkg_events = parse.number_threshold(bkg_events, 1)
@@ -57,7 +67,7 @@ def main():
         #2d plot variable
         x_var = pt1
         y_var = pt2
-        
+
     #
     #b. Energy cuts, have Ne different energies
     if args.energy:
@@ -93,20 +103,18 @@ def main():
 
         x_var = et1
         y_var = et2'''
-        
-    #
-    #
+
     #Invariant masses after all the filtering.
-    invariant_masses_higgs = get_invariant_masses(higgs_events)
-    #invariant_masses_bkg = get_invariant_masses(bkg_events)
-    #invariant_masses_combined = invariant_masses_higgs + invariant_masses_bkg
+    invariant_masses_higgs = parse.get_invariant_masses(higgs_events)
+    invariant_masses_bkg = parse.get_invariant_masses(bkg_events)
+    invariant_masses_combined = invariant_masses_higgs + invariant_masses_bkg
 
-    all_invariant_masses_higgs = list(map(lambda x: get_invariant_masses(x), all_higgs_events))
-    #all_invariant_masses_bkg = list(map(lambda x: get_invariant_masses(x), all_bkg_events))    
+    all_invariant_masses_higgs = list(map(lambda x: parse.get_invariant_masses(x), all_higgs_events))
+    all_invariant_masses_bkg = list(map(lambda x: parse.get_invariant_masses(x), all_bkg_events))
 
-    
- 
-    
+
+
+
     #Plotting the data
     #Cross section data
     cs_higgs = 17.35
@@ -122,9 +130,9 @@ def main():
         hist_higgs, bins = np.histogram(invariant_masses, bins)
         hist_higgs = list(map(lambda x: x * w_higgs, hist_higgs))
         bins = bins[0:len(bins) - 1]
-        peak_guess = hist_higgs[120/res]
+        peak_guess = hist_higgs[int(120/res)]
         z.append(peak_guess)
-    
+
 
 if __name__ == '__main__':
     main()

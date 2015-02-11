@@ -37,7 +37,7 @@ def energy_threshold(events, E):
     return events
 
 #combined filter
-def combined_filter(events, num=1, momentum_lower=20, momentum_higher=40, energy=20):
+def combined_filter(events, num=1, momentum_lower=10, momentum_higher=50, energy=20):
     #Filtering events
     res = energy_threshold(events, energy)
 

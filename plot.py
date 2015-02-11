@@ -10,7 +10,7 @@ def parse_file(path, count=False):
     with open(path) as data_file:
         raw = data_file.read().replace('[', '').replace(']', '').split(',')
         return list(map(float, raw))
-        
+
 def fit_bkg(x, y, res=3, x_min=120, x_max=150, length = 100):
     #Fit exp
     #Want a continuous function independant of resolution
@@ -27,12 +27,12 @@ def fit_bkg(x, y, res=3, x_min=120, x_max=150, length = 100):
     xmax = xmin + length
     #x_min to x_max - so piecewise could be done.
     #k = log(y[x_min]/y[x_max])/float(x_max)
-    x_range = range(0,  N) 
+    x_range = range(0,  N)
     x_res = list(map(lambda x: (x_min + x * (x_max - x_min)/N), x_range))
     #y_res = list(map(lambda x: A* exp(-(x - x_min) * k), x_res))
     y_res = list(map(lambda x: f(x, c[0], c[1], c[2], c[3], c[4]), x_res))
     #y_res = list(map(lambda x: g(x, c[0]), x_res))
-        
+
     return [x_res, y_res]
 
 def main():
@@ -77,7 +77,7 @@ def main():
     hist_bkg = list(map(lambda x: x*w_bkg, hist_bkg))
     hist_comb = list(map(lambda x, y: x + y, hist_higgs, hist_bkg))
 
-    
+
 
     bins = bins[0:len(bins) - 1]
     #hist_comb = list(map(lambda x: x/sum_hist_comb, hist_comb))
@@ -93,10 +93,10 @@ def main():
 
     if not args.not_comb:
         plt.bar(bins, hist_comb, label = 'Higgs + Background', color='b', width = res)
-        
+
     if args.fit_bkg:
         plt.plot(bkg_x, bkg_y, label = 'Background line', color = 'r')
-    
+
 
     if args.higgs:
         plt.bar(bins, hist_higgs, label = 'Higgs', color='r', width = res)
