@@ -36,11 +36,28 @@ def energy_threshold(events, E):
         event.momenta = list(filter(lambda x: x.energy > E, event.momenta))
     return events
 
-#combined filter
-def combined_filter(events, num=1, momentum_lower=4, momentum_higher=50, energy=20):
-    #Filtering events
-    res = energy_threshold(events, energy)
+def energy_threshold_2(events, E):
+    events2 = []
+    for event in events:
+        for momenta in event.momenta:
+            if momenta.energy > E:
+                events2.append(event)
+    return events2
 
+def deta_threshold(events, eta):
+    return list(filter(lambda x: x.eta_diff_max() > eta, events))
+
+
+def dazi_threshold(events, azi):
+    return list(filter(lambda x: x.azi_diff_max()> azi, events))
+
+
+#combined filter
+def combined_filter(events, num=1, momentum_lower=4, momentum_higher=50, energy_lower=20, energy_higher = 20,
+                    deta = 0, dazi = 0):
+    #Filtering events
+    res = energy_threshold(events, energy_lower)
+    res = energy_threshold_2(events, energy_higher)
     #One photon with transverse momentum > 20GeV
     res = transverse_threshold(res, momentum_lower)
 
@@ -49,6 +66,10 @@ def combined_filter(events, num=1, momentum_lower=4, momentum_higher=50, energy=
 
     #only show events with at least 2 momenta
     res = number_threshold(res, num)
+
+    res = deta_threshold(res, deta)
+
+    res = dazi_threshold(res, dazi)
 
     for event in res:
         event.filter_highest(2)

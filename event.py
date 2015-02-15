@@ -41,6 +41,34 @@ class Event:
         for i in ind:
             momenta.append(self.momenta[i])
         self.momenta = momenta
+        
+    def azi_diff_max(self):
+        diff = []
+        dphi = 0
+        for i in range(0, len(self.momenta)):
+            for j in range(0, len(self.momenta)):
+                if i<j:
+                    dphi = abs(self.momenta[i].azimuthal() - self.momenta[j].azimuthal())
+                    while dphi > pi:
+                        dphi = abs(2 * pi - dphi)
+                    diff.append(dphi**2)
+        
+        smallest = sorted(diff)[0]
+        largest = sorted(diff)[-1]
+        return largest
+
+    def eta_diff_max(self):
+        diff = []
+        deta = 0
+        for i in range(0, len(self.momenta)):
+            for j in range(0, len(self.momenta)):
+                if i < j:
+                    deta = abs(self.momenta[i].eta() - self.momenta[j].eta())
+                    diff.append(deta**2)
+        
+        smallest = sorted(diff)[0]
+        largest = sorted(diff)[-1]
+        return largest
 
     def invariant_mass(self):
         """ Calculate the invariant mass from the four momenta. """
