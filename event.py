@@ -41,7 +41,7 @@ class Event:
         for i in ind:
             momenta.append(self.momenta[i])
         self.momenta = momenta
-        
+
     def azi_diff_max(self):
         diff = []
         dphi = 0
@@ -52,7 +52,7 @@ class Event:
                     while dphi > pi:
                         dphi = abs(2 * pi - dphi)
                     diff.append(dphi**2)
-        
+
         smallest = sorted(diff)[0]
         largest = sorted(diff)[-1]
         return largest
@@ -65,7 +65,7 @@ class Event:
                 if i < j:
                     deta = abs(self.momenta[i].eta() - self.momenta[j].eta())
                     diff.append(deta**2)
-        
+
         smallest = sorted(diff)[0]
         largest = sorted(diff)[-1]
         return largest
