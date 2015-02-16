@@ -22,12 +22,19 @@ def main():
     parser.add_argument('--transverse', action='store_true', help='transverse cuts')
     parser.add_argument('--energy', action = 'store_true', help = 'energy cuts')
     parser.add_argument('--etaphi', action = 'store_true', help = 'cuts both azimuthal and psudeorapidity difference squared')
-    
+    parser.add_argument('range2D', metavar = 'range2D', type = int, nargs = '+', 
+                       help = 'choose x-axis for plot, xmin xmax step ymin ymax step')
 
     args = parser.parse_args()
     xlabel = ''
     ylabel = ''
     title = ''
+    xrange = args.range2D[0:3]
+    if len(xrange)<3:
+        xrange = [0, 100, 20]
+    yrange = args.range2D[3:len(args.range2D)]
+    if len(yrange) < 3:
+        yrange = [0, 100, 20]
     # Get all the events
     higgs_events = parse.parse_file('higgs.txt', momenta_in_event=True)
     filtered_higgs = {}
@@ -38,8 +45,8 @@ def main():
     
     if args.transverse:
     # Apply a series of different filters in turn
-        lower_momentum = range(4, 10, 2)
-        higher_momentum = range(50, 70 ,5)
+        lower_momentum = range(xrange[0], xrange[1], xrange[2])
+        higher_momentum = range(yrange[0], yrange[1], yrange[2])
         xlabel = '$p_{T1}$'
         ylabel = '$p_{T2}$'
         title = 'transverse momenta'
@@ -56,8 +63,8 @@ def main():
                                                                           energy_higher = 0, deta = 0, dazi = 0)
 
     if args.energy:
-        lower_energy = range(0, 100, 20)
-        higher_energy = range(0, 100, 20)
+        lower_energy = range(xrange[0], xrange[1], xrange[2])
+        higher_energy = range(yrange[0], yrange[1], yrange[2])
         xlabel = '$E_1$'
         ylabel = '$E_2$'
         title = 'Energy'
@@ -73,8 +80,8 @@ def main():
                                                                           momentum_higher = 0, energy_lower = lower,
                                                                           energy_higher = higher, deta = 0, dazi = 0)
     if args.etaphi:
-        eta = range(-5, 5, 1)
-        phi = range(-5, 5, 1)
+        eta = range(xrange[0], xrange[1], xrange[2])
+        phi = range(yrange[0], yrange[1], yrange[2])
         ylabel = '$d\eta^2$'
         xlabel = '$d\phi^2$'
         title = 'azimuthal angle, and pseudorapidity'
