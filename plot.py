@@ -42,7 +42,7 @@ def main():
     parser.add_argument('--bkg', action = 'store_true', help = 'Plots the histogram from only the background')
     parser.add_argument('--norm', action = 'store_true', help = 'Normalise all plots')
     parser.add_argument('--ratio', action = 'store_true', help = 'Use ratio to calculate the weights of higgs and bkgs.')
-    parser.add_argument('--fit_bkg', action = 'store_false', help = 'Plot line of background when doing combined.')
+    parser.add_argument('--fit_bkg', action = 'store_true', help = 'Plot line of background when doing combined.')
     args = parser.parse_args()
 
     invariant_masses_higgs = parse_file('outputIM_Higgs.txt')
