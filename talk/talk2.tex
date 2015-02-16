@@ -35,11 +35,7 @@ The Higgs boson is produced in many channels.
 \pause
 The most common in proton collider experiments is 'gluon gluon Fusion' (ggF)
 \begin{figure}
-<<<<<<< HEAD
 \includegraphics[scale = 0.15]{VBF.png}
-=======
-\includegraphics[scale = 0.1]{VBF.png}
->>>>>>> ed1fc956dfb2d8a44f612b16e7f751e38a8b31e8
 \caption{Gluons fusing into a Higgs at a proton-proton interaction}
 \end{figure}
 \pause
@@ -109,11 +105,24 @@ By knowing the branching factor of the Higgs to two photons decay, as well as th
   \frametitle{Filter Methods}
 
   \begin{enumerate}
-    \item Transverse momentum filtering
-    \item Pseudorapidity filtering
-    \item Azimuthal angle filtering
+    \item Number of particles
+    \item Transverse momentum
+    \item Energy
+    \item Azimuthal angle
   \end{enumerate}
 }
+
+\frame{
+\frametitle{Selection cuts}
+\begin{enumerate}
+\item Number cut so that only events with 2 or more photons are counted
+\item 2 Transverse momentum, $p_T$, cuts so that 1 photon has a larger $p_T$ than $p_{T1}$ and the other has a $p_T > p_{T2}$
+\item 2 Energy $E$ cuts, in a similar principle to the $p_T$ cuts
+\item Cuts for the angular difference between the 2 photons derived from the difference in azimuthal angle $\Delta \phi^2$ and the difference in pseudorapidity, $\Delta \eta^2$
+\end{enumerate}
+}
+
+
 
 \frame{
 \frametitle{Optimising our Filters}
@@ -140,6 +149,7 @@ We apply the filtering and calculate the significance for a series of different 
 This is a 3D plot generated from a script that calculates the statistical signifiance for various transverse momenta cuts. From graphs like these we can narrow down the ranges of transverse momenta that we filter until we get the highest statistical significance. We use PyPlot to generate our plots.
 }
 
+
 \frame{
 \frametitle{Seeing the Higgs}
 
@@ -158,23 +168,10 @@ Very hard to see higgs, had to optimise etc...
 
 Could possibly observe a different decay channel. Jets. Experimentation with PYTHIA.
 }
-<<<<<<< HEAD
-\frame{
-\frametitle{Selection cuts}
-A number of selection cuts are applied to the events
-\pause
-\begin{enumerate}
-\item Number cut so that only events with 2 or more photons are counted
-\item 2 Transverse momentum, $p_T$, cuts so that 1 photon has a larger $p_T$ than $p_{T1}$ and the other has a $p_T > p_{T2}$
-\item 2 Energy $E$ cuts, in a similar principle to the $p_T$ cuts
-\item Cuts for the angular difference between the 2 photons derived from the difference in azimuthal angle $\Delta \phi^2$ and the difference in pseudorapidity, $\Delta \eta^2$ 
-\end{enumerate}
-}
-=======
+
 
 \frame{
 \frametitle{Conclusion/Questions}
 }
 
->>>>>>> ed1fc956dfb2d8a44f612b16e7f751e38a8b31e8
 \end{document}
