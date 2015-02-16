@@ -25,7 +25,7 @@ The Higgs boson is produced in many channels.
 \pause
 The most common in proton collider experiments is 'gluon gluon Fusion' (ggF)
 \begin{figure}
-\includegraphics[scale = 0.2]{VBF.png}
+\includegraphics[scale = 0.15]{VBF.png}
 \caption{Gluons fusing into a Higgs at a proton-proton interaction}
 \end{figure}
 \pause
@@ -33,7 +33,7 @@ The Higgs decays in a very short period of time in many channels, the most commo
 }
 \frame{
 \begin{figure}
-\includegraphics[scale=0.2]{Hyy.png}
+\includegraphics[scale=0.15]{Hyy.png}
 \caption{Decay of Higgs into 2 photons}
 \end{figure}
 This has a branching fraction of order of  $10^{-3}$ but is much  easier to detect experimentally.
@@ -53,5 +53,16 @@ We need to filter out all of the combined events so that the statistical signifi
 
     
 Where $S$ is the number of filtered signal (from the simulation) events and $B$ is the number of filtered background events (also simulated.)
+}
+\frame{
+\frametitle{Selection cuts}
+A number of selection cuts are applied to the events
+\pause
+\begin{enumerate}
+\item Number cut so that only events with 2 or more photons are counted
+\item 2 Transverse momentum, $p_T$, cuts so that 1 photon has a larger $p_T$ than $p_{T1}$ and the other has a $p_T > p_{T2}$
+\item 2 Energy $E$ cuts, in a similar principle to the $p_T$ cuts
+\item Cuts for the angular difference between the 2 photons derived from the difference in azimuthal angle $\Delta \phi^2$ and the difference in pseudorapidity, $\Delta \eta^2$ 
+\end{enumerate}
 }
 \end{document}

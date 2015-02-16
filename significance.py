@@ -9,10 +9,14 @@ import argparse
 def statistical_significance(signal, background):
     """ Calculate statistical significance given num. signal events
         and num. background events. """
+    cs_H = 17.35
+    br_yy = 2.28e-3
+    cs_bkg = 140.
+    w = cs_H * br_yy/cs_bkg 
     if signal == 0:
         return 0
     else:
-        return signal / sqrt(signal + background)
+        return signal * w / sqrt(signal * w + background)
 
 def main():
     parser = argparse.ArgumentParser(description="""Generate 2D histogram of

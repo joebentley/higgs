@@ -45,11 +45,11 @@ def energy_threshold_2(events, E):
     return events2
 
 def deta_threshold(events, eta):
-    return list(filter(lambda x: x.eta_diff_max() > eta, events))
+    return list(filter(lambda x: x.eta_diff_max() > eta**2, events))
 
 
 def dazi_threshold(events, azi):
-    return list(filter(lambda x: x.azi_diff_max()> azi, events))
+    return list(filter(lambda x: x.azi_diff_max()> azi**2, events))
 
 
 #combined filter
