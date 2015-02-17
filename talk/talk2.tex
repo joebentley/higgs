@@ -149,17 +149,24 @@ We apply the filtering and calculate the significance for a series of different 
 This is a 3D plot generated from a script that calculates the statistical signifiance for various transverse momenta cuts. From graphs like these we can narrow down the ranges of transverse momenta that we filter until we get the highest statistical significance. We use PyPlot to generate our plots.
 }
 
+\frame{
+  We can use the same method to check for example which azimuthal angles gives the highest statistical significance, by plotting a 2D scatter graph of statistical significance against scatter angle.
+}
+
 
 \frame{
 \frametitle{Seeing the Higgs}
 
-Actually observing it explanation
+Actually observing it explanation, as in, mathematically.
 }
 
 \frame{
 \frametitle{Issues}
 
-Very hard to see higgs, had to optimise etc...
+\begin{itemize}
+  \item Since there are were so many background events, the python script was slow. Fixed using script to generate four momentum count headers on each event.
+
+\end{itemize}
 
 }
 
@@ -167,6 +174,12 @@ Very hard to see higgs, had to optimise etc...
 \frametitle{Further Explorations}
 
 Could possibly observe a different decay channel. Jets. Experimentation with PYTHIA.
+
+\begin{itemize}
+  \item Since we have access to PYTHIA, the program that simulated the data, we could potentially generate new data
+  \item Since our program is quite general, it wouldn't be too difficult to alter it for other Higgs decays
+\end{itemize}
+
 }
 
 
