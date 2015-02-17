@@ -28,6 +28,18 @@
 \end{enumerate}
 }
 
+\frame{
+  \frametitle{Some Terminology}
+
+  There is some terminology we will use in this, so we will define a few terms here
+
+  \begin{itemize}
+    \item Transverse momentum is the component of momentum perpendicular to the beam axis
+    \item Azimuthal angle is the angle between the momentum and the beam axis
+    \item Invariant mass is the same in all reference frames and defined as $m_0^2 = E^2 - {\lvert \mathbf{p} \rvert}^2$
+  \end{itemize}
+}
+
 
 \frame{
 \frametitle{Background}
@@ -38,13 +50,13 @@ The most common in proton collider experiments is 'gluon gluon Fusion' (ggF)
 \includegraphics[scale = 0.15]{VBF.png}
 \caption{Gluons fusing into a Higgs at a proton-proton interaction}
 \end{figure}
-\pause
-The Higgs decays in a very short period of time in many channels, the most common is 2 bottom quarks, but we investigate the decay into 2 photons (the diphoton channel.)
 }
 
 \frame{
+\frametitle{Decay}
+The Higgs decays in a very short period of time in many channels, the most common is 2 bottom quarks, but we investigate the decay into 2 photons (the diphoton channel.)
 \begin{figure}
-\includegraphics[scale=0.15]{Hyy.png}
+\includegraphics[scale=0.13]{Hyy.png}
 \caption{Decay of Higgs into 2 photons}
 \end{figure}
 This has a branching fraction of order of $10^{-3}$ but is much easier to detect experimentally.
@@ -54,27 +66,25 @@ This has a branching fraction of order of $10^{-3}$ but is much easier to detect
 \frame{
 \frametitle{Simulation}
 
-The Higgs events and background events are simulated using PYTHIA. The simulation consists of a text file of the Energy and momentum (4 momentum) of each photon in each event (read collision.) We will use 1 simulation of Higgs events (which still have background in them) and 1 simulation of background events.
+\begin{itemize}
+  \item The Higgs events and background events provided to us are simulated using PYTHIA.
+  \item The simulation consists of a text file of the Energy and momentum (four momentum) of each photon in each collision event
+  \item We will use one simulation of 10,000 Higgs events (which still have background in them) and one simulation of 1,000,000 background events
+\end{itemize}
+
 }
 
 \frame{
 \frametitle{Parsing}
 
 \begin{itemize}
-  \item We use a script written in Python 3 to parse the event data from the four momenta
-  \item It calculates the invariant mass of each decay event and outputs this to a plaintext file for plotting
+  \item To parse the events, we wrote a script in Python 3 to parse the four momenta from the event data
+  \item It calculates the invariant mass of each decay event and outputs this to a plaintext file for plotting in a histogram
   \item It can also apply a range of filtering on the events to filter out events that are not Higgs
-  \item The script is written as a library so that we can use its features from other scripts, like our filter optimisation scripts
+  \item The script is written as a module so that we can use it from other scripts, for example we use it in the statistical significance script to apply the filtering
 \end{itemize}
 }
 
-\frame{
-  \frametitle{Terms}
-
-  Transverse momentum is the component of momentum perpendicular to the beam axis.
-
-  etc.. (explain so the audience aren't too confused about particle physics terms)
-}
 
 \frame{
 \frametitle{Weighting}
