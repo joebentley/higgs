@@ -29,17 +29,40 @@
 \end{enumerate}
 }
 
+\frame{
+\frametitle{Kinematic variables}
+4-momentum, $p^{\mu}$ is defined by 3 parameters for a photon:
+\begin{align}
+E = p^t &= p_T \cosh{\eta} \\
+p^x &= p_T \cos{\phi}\\
+p^y &= p_T \sin{\phi}\\
+p^z &= p_T \sinh{\eta}
+\end{align}
+\begin{enumerate}
+\item $p_T$ is the transverse momentum
+\item $\eta$ is the pseudo rapidity (which is the rapidity for a photon)
+\item $\phi$ is the azimuthal angle
+\end{enumerate}
+
+}
 
 \frame{
-  \frametitle{Some Terminology}
+\frametitle{Kinematic variables}
+\begin{itemize}
+\item $\Delta \phi$ is Lorentz invariant since the angle is measured in a plane perpendicular to the beam line (subject to Lorentz transformations)
+\item $\Delta \eta$ is Lorentz invariant since the 
 
-  There is some terminology we will use in this, so we will define a few terms here
-
-  \begin{itemize}
-    \item Transverse momentum is the component of momentum perpendicular to the beam axis
-    \item Azimuthal angle is the angle between the momentum and the beam axis
-    \item Invariant mass is the same in all reference frames and defined as $m_0^2 = E^2 - {\lvert \mathbf{p} \rvert}^2$
-  \end{itemize}
+\frame{
+  \frametitle{Kinematic Variables}
+  Photons have the property $E = p = \sqrt{(p^x)^2 + (p^y)^2 + (p^z)^2}$ so rapidity $y$ is the same as the pseudo rapidity, $\eta$.
+  \begin{align*}
+  \eta &\equiv \frac{1}{2} \log(\frac{p +p^z}{p - p^z}) \\
+  	&= \frac{1}{2} \log(\frac{E + p^z}{E - p^z}) \equiv y
+ \end{align*}
+  \begin{enumerate}
+  \item Rapidity allows for a measure of how far forwards the photon travels parallel to the beam line
+  \item The differences $\Delta \phi^2$ and $\Delta \eta^2$ are Lorentz invariant so we can use these instead of a polar angle in the photon frame.
+  \end{enumerate}
 }
 
 
@@ -50,7 +73,7 @@ The most common in proton collider experiments is 'gluon gluon Fusion' (ggF)
 \pause
 \begin{figure}
 \includegraphics[scale = 0.15]{VBF.png}
-\caption{Gluons fusing into a Higgs at a proton-proton interaction}
+\caption{Gluons fusing into a Higgs at a proton-proton interaction, note the circle at the meeting of the 2 gluons represents the various quark (or W boson) loops that produce the Higgs}
 \end{figure}
 }
 
@@ -61,7 +84,6 @@ The Higgs decays in a very short period of time in many channels, the most commo
 \includegraphics[scale=0.13]{Hyy.png}
 \caption{Decay of Higgs into 2 photons}
 \end{figure}
-This has a branching fraction of order of $10^{-3}$ but is much easier to detect experimentally.
 }
 
 
@@ -102,10 +124,15 @@ This has a branching fraction of order of $10^{-3}$ but is much easier to detect
 \begin{align*}
   \frac{\text{num. Higgs events}}{\text{num. background events}} = \frac{\sigma{\left(\text{Higgs produced}\right)} \times B_f\left(H\to\gamma\gamma\right)}{\sigma{\left(\text{background}\right)}}
 \end{align*}
-
-By knowing the branching factor of the Higgs to two photons decay, as well as the cross sections of the background and of the Higgs production, we can use the above equation to calculate how much weighting we need to apply to the Higgs or background events in our histogram.
 }
 
+\frame{
+\frametitle{Weighting}
+\begin{itemize}
+\item The weighting is constructed such that the background events have weightings of 1.
+\item Higgs signals are weighted to produce a probability of producing a Higgs and that the Higgs decays into 2 photons and taking the ratio of simply producing 2 background photons.
+\end{itemize}
+}
 
 \frame{
 \frametitle{Filtering}
@@ -138,7 +165,14 @@ By knowing the branching factor of the Higgs to two photons decay, as well as th
 \end{enumerate}
 }
 
-
+\frame{
+\frametitle{Physical meaning behind filtering}
+\begin{itemize}
+\item $E$ make the assumption that photons in the Higgs decay will be of high energy (or momentum)
+\item Transverse cuts which allow for photons to be cut that mainly decay perpendicular to the beam line.
+\item The $\Delta \eta$ and $\Delta \phi$ cuts allow for a Lorentz invariant angular separation between the photons. We can construct events that are 'back to back' which we expect from a Higgs decaying.
+\end{itemize}
+}
 
 \frame{
 \frametitle{Optimising our Filters}
@@ -164,7 +198,7 @@ We apply the filtering and calculate the significance for a series of different 
 \caption{Statistical significance (height of points) for a series of different transverse momenta}
 \end{figure}
 
-This is a 3D plot generated from a script that calculates the statistical signifiance for various transverse momenta cuts. From graphs like these we can narrow down the ranges of transverse momenta that we filter until we get the highest statistical significance. We use PyPlot to generate our plots.
+This is a 3D plot generated from a script that calculates the statistical signifiance for various transverse momenta cuts. From graphs like these we can narrow down the ranges of transverse momenta that we filter until we get the highest statistical significance. We use PyPlot (matplotlib) to generate our plots.
 }
 
 \frame{
@@ -173,9 +207,10 @@ This is a 3D plot generated from a script that calculates the statistical signif
 
 
 \frame{
-\frametitle{Seeing the Higgs}
+\frametitle{Invariant mass histogram}
 
-We calculate a histogram using the numpy library.
+We calculate a histogram of invariant mass of the diphoton system ($m_{\gamma \gamma}$) using the 'numpy' (numerical python) library.
+Whilst this is not the primary aim (optimising a signal) it gives a visual representation of signal strength (i.e. 'seeing the Higgs').
 
 }
 
@@ -196,6 +231,7 @@ Could possibly observe a different decay channel. Jets. Experimentation with PYT
 \begin{itemize}
   \item Since we have access to PYTHIA, the program that simulated the data, we could potentially generate new data
   \item Since our program is quite general, it wouldn't be too difficult to alter it for other Higgs decays
+  \item The program being entered around photon data would require changes to the filtering as we would have 4 momenta with non-zero invariant masses, so that background simulation is much more difficult, involving different particles.
 \end{itemize}
 
 }
