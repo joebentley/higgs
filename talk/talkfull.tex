@@ -24,13 +24,12 @@
 \item How Higgs signals are simulated
 \item How the signals are interpreted
 \item How the Higgs signal is optimised
-\item Problems in optimisation and improvements
 \item Possible expansions of the project
 \end{enumerate}
 }
 
 \frame{
-\frametitle{Kinematic variables}
+\frametitle{Kinematic Variables}
 4-momentum, $p^{\mu}$ is defined by 3 parameters for a photon:
 \begin{align}
 E = p^t &= p_T \cosh{\eta} \\
@@ -39,7 +38,7 @@ p^y &= p_T \sin{\phi}\\
 p^z &= p_T \sinh{\eta}
 \end{align}
 \begin{enumerate}
-\item $p_T$ is the transverse momentum
+  \item $p_T$ is the transverse momentum (the component of momentum perpendicular to the beam axis)
 \item $\eta$ is the pseudo rapidity (which is the rapidity for a photon)
 \item $\phi$ is the azimuthal angle
 \end{enumerate}
@@ -47,10 +46,11 @@ p^z &= p_T \sinh{\eta}
 }
 
 \frame{
-\frametitle{Kinematic variables}
+\frametitle{Kinematic Variables}
 \begin{itemize}
 \item $\Delta \phi$ is Lorentz invariant since the angle is measured in a plane perpendicular to the beam line (subject to Lorentz transformations)
-\item $\Delta \eta$ is Lorentz invariant since the 
+\end{itemize}
+}
 
 \frame{
   \frametitle{Kinematic Variables}
@@ -93,7 +93,7 @@ The Higgs decays in a very short period of time in many channels, the most commo
 \begin{itemize}
   \item The Higgs events and background events provided to us are simulated using PYTHIA.
   \item The simulation consists of a text file of the Energy and momentum (four momentum) of each photon in each collision event
-  \item We will use one simulation of 10,000 Higgs events (which still have background in them) and one simulation of 1,000,000 background events
+  \item We will use one simulation of 10,000 Higgs events and one simulation of 1,000,000 background events
 \end{itemize}
 
 }
@@ -129,8 +129,8 @@ The Higgs decays in a very short period of time in many channels, the most commo
 \frame{
 \frametitle{Weighting}
 \begin{itemize}
-\item The weighting is constructed such that the background events have weightings of 1.
-\item Higgs signals are weighted to produce a probability of producing a Higgs and that the Higgs decays into 2 photons and taking the ratio of simply producing 2 background photons.
+\item Higgs signals are weighted to produce a probability of producing a Higgs and that the Higgs decays into 2 photons and taking the ratio of simply producing 2 background photons
+\item The weighting is constructed such that the background events have weightings of 1
 \end{itemize}
 }
 
