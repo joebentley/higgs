@@ -36,6 +36,7 @@ def main():
     parser.add_argument('range2D', metavar = 'range2D', type = int, nargs = '+',
                        help = 'choose x-axis for plot, xmin xmax step ymin ymax step')
     parser.add_argument('--out_opt', action = 'store_true', help = 'outputs invarant masses of optimised results')
+    parser.add_argument('--invmass', action = 'store_true', help = 'use invariant mass filter')
     args = parser.parse_args()
     xlabel = ''
     ylabel = ''
@@ -47,11 +48,17 @@ def main():
     if len(yrange) < 3:
         yrange = [0, 100, 20]
     # Get all the events
+    m = 0
     higgs_events = parse.parse_file('higgs.txt', momenta_in_event=True)
+    if args.invmass:
+        higgs_events = parse.invmass_threshold(higgs_events, m)
+
     filtered_higgs = {}
 
     if args.back:
         bkg_events = parse.parse_file('background.txt', momenta_in_event=True)
+        if args.invmass:
+            bkg_events = parse.invmass_threshold(bkg_events, m)
         filtered_bkg = {}
 
     if args.transverse:
@@ -108,6 +115,10 @@ def main():
                                                                      num = 1, momentum_lower = 0,
                                                                      momentum_higher = 0, energy_lower = 0,
                                                                      energy_higher = 0, deta = rap, dazi = az)
+<<<<<<< HEAD
+=======
+         
+>>>>>>> c6dcc12a265a9473566f06ae81b03677aa533ccc
 
     # Higgs and background should have same keys
     keys = filtered_higgs.keys()
@@ -135,6 +146,7 @@ def main():
     plt.show()
 
     opt_x, opt_y,z_max  = get_largest(bins, x, y)
+<<<<<<< HEAD
 
     higgs_opt = filtered_higgs[(opt_x, opt_y)]
     #bkg_opt = filtered_bkg[(opt_x, opt_y)]
@@ -146,6 +158,30 @@ def main():
         out_higgs.write(str(inv_higgs))
         out_higgs.close()
 
+=======
+    higgs_opt = filtered_higgs[(opt_x, opt_y)]
+    #bkg_opt = filtered_bkg[(opt_x, opt_y)]
+     
+    opt_pT1, opt_pT2, opt_E1, opt_E2, opt_dphi, opt_deta = [0, 0, 0, 0, 0 ,0]
+    if args.transverse:
+        opt_pT1, opt_pT2 = opt_x, opt_y
+    if args.energy:
+        opt_E1, opt_E2 = opt_x, opt_y
+    if args.etaphi:
+        opt_dphi, opt_deta = opt_x, opt_y
+    
+    m = 50
+    param = [opt_pT1, opt_pT2, opt_E1, opt_E2, opt_dphi, opt_deta, m]
+    param = str(param)
+    param = param.replace('[', '').replace(']', '')
+
+    if args.out_opt:
+        output_opt = open('optimised.txt', 'w')
+        output_opt.write(param)
+        output_opt.close()
+    
+        
+>>>>>>> c6dcc12a265a9473566f06ae81b03677aa533ccc
 
 if __name__ == '__main__':
     main()
