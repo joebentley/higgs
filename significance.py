@@ -19,7 +19,7 @@ def statistical_significance(signal, background):
     cs_H = 17.35
     br_yy = 2.28e-3
     cs_bkg = 140.
-    w = cs_H * br_yy/cs_bkg 
+    w = cs_H * br_yy/cs_bkg
     if signal == 0:
         return 0
     else:
@@ -33,7 +33,7 @@ def main():
     parser.add_argument('--transverse', action='store_true', help='transverse cuts')
     parser.add_argument('--energy', action = 'store_true', help = 'energy cuts')
     parser.add_argument('--etaphi', action = 'store_true', help = 'cuts both azimuthal and psudeorapidity difference squared')
-    parser.add_argument('range2D', metavar = 'range2D', type = int, nargs = '+', 
+    parser.add_argument('range2D', metavar = 'range2D', type = int, nargs = '+',
                        help = 'choose x-axis for plot, xmin xmax step ymin ymax step')
     parser.add_argument('--out_opt', action = 'store_true', help = 'outputs invarant masses of optimised results')
     parser.add_argument('--invmass', action = 'store_true', help = 'use invariant mass filter')
@@ -69,7 +69,7 @@ def main():
         if args.invmass:
             bkg_events = parse.invmass_threshold(bkg_events, m)
         filtered_bkg = {}
-    
+
     if args.transverse:
     # Apply a series of different filters in turn
         lower_momentum = range(xrange[0], xrange[1], xrange[2])
@@ -97,12 +97,12 @@ def main():
         title = 'Energy'
         for lower in lower_energy:
             for higher in higher_energy:
-                filtered_higgs[(lower, higher)] = parse.combined_filter(higgs_events, 
+                filtered_higgs[(lower, higher)] = parse.combined_filter(higgs_events,
                                                                         num = 1, momentum_lower = 0,
                                                                         momentum_higher = 0, energy_lower = lower,
                                                                         energy_higher = higher, deta = 0, dazi = 0)
                 if args.back:
-                    filtered_bkg[(lower, higher)] = parse.combined_filter(bkg_events, 
+                    filtered_bkg[(lower, higher)] = parse.combined_filter(bkg_events,
                                                                           num = 1, momentum_lower = 0,
                                                                           momentum_higher = 0, energy_lower = lower,
                                                                           energy_higher = higher, deta = 0, dazi = 0)
@@ -118,13 +118,12 @@ def main():
                                                                         num = 1, momentum_lower = 0,
                                                                         momentum_higher = 0, energy_lower = 0,
                                                                         energy_higher = 0, deta = rap, dazi = az)
-                
+
                 if args.back:
-                    filtered_bkg[(az, rap)] = parse.combined_filter(bkg_events, 
-                                                                     num = 1, momentum_lower = 0, 
+                    filtered_bkg[(az, rap)] = parse.combined_filter(bkg_events,
+                                                                     num = 1, momentum_lower = 0,
                                                                      momentum_higher = 0, energy_lower = 0,
                                                                      energy_higher = 0, deta = rap, dazi = az)
-         
 
     # Higgs and background should have same keys
     keys = filtered_higgs.keys()
@@ -153,9 +152,10 @@ def main():
         plt.show()
 
     opt_x, opt_y,z_max  = get_largest(bins, x, y)
+
     higgs_opt = filtered_higgs[(opt_x, opt_y)]
     #bkg_opt = filtered_bkg[(opt_x, opt_y)]
-     
+
     opt_pT1, opt_pT2, opt_E1, opt_E2, opt_dphi, opt_deta = [0, 0, 0, 0, 0 ,0]
     if args.transverse:
         opt_pT1, opt_pT2 = opt_x, opt_y
@@ -163,7 +163,12 @@ def main():
         opt_E1, opt_E2 = opt_x, opt_y
     if args.etaphi:
         opt_dphi, opt_deta = opt_x, opt_y
+<<<<<<< HEAD
     
+=======
+
+    m = 50
+>>>>>>> 617e019b7c3636c9ac57d7f299c3404ecfe78cdd
     param = [opt_pT1, opt_pT2, opt_E1, opt_E2, opt_dphi, opt_deta, m]
     param = str(param)
     param = param.replace('[', '').replace(']', '')
@@ -172,7 +177,11 @@ def main():
         output_opt = open('optimised.txt', 'w')
         output_opt.write(param)
         output_opt.close()
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 617e019b7c3636c9ac57d7f299c3404ecfe78cdd
 
 if __name__ == '__main__':
     main()
