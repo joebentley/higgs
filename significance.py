@@ -52,7 +52,7 @@ def main():
     # Get all the events
     m = 0
     higgs_events = parse.parse_file('higgs.txt', momenta_in_event=True)
-    if args.invmass:
+    if not args.invmass:
         higgs_events = parse.invmass_threshold(higgs_events, m)
 
     filtered_higgs = {}
