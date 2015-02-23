@@ -163,12 +163,8 @@ def main():
         opt_E1, opt_E2 = opt_x, opt_y
     if args.etaphi:
         opt_dphi, opt_deta = opt_x, opt_y
-<<<<<<< HEAD
-    
-=======
 
     m = 50
->>>>>>> 617e019b7c3636c9ac57d7f299c3404ecfe78cdd
     param = [opt_pT1, opt_pT2, opt_E1, opt_E2, opt_dphi, opt_deta, m]
     param = str(param)
     param = param.replace('[', '').replace(']', '')
@@ -177,11 +173,8 @@ def main():
         output_opt = open('optimised.txt', 'w')
         output_opt.write(param)
         output_opt.close()
-<<<<<<< HEAD
     
-=======
 
->>>>>>> 617e019b7c3636c9ac57d7f299c3404ecfe78cdd
 
 if __name__ == '__main__':
     main()
