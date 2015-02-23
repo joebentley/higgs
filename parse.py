@@ -49,7 +49,7 @@ def deta_threshold(events, eta):
 
 
 def dazi_threshold(events, azi):
-    return list(filter(lambda x: x.azi_diff_max()> azi**2, events))
+    return list(filter(lambda x: x.azi_diff_max() > azi**2, events))
 
 
 #combined filter
@@ -161,6 +161,9 @@ def main():
     parser.add_argument('--onlyhiggs', action='store_true',
         help="""Only use the Higgs file (don't parse the background)""")
 
+    parser.add_argument('--lower', nargs=1, type=int, default=10, help='Lower momentum cut')
+    parser.add_argument('--upper', nargs=1, type=int, default=90, help='Upper momentum cut')
+
 
 
     args = parser.parse_args()
@@ -168,7 +171,7 @@ def main():
     # Higgs signal
     higgs_events = parse_file(args.higgs_path, count=args.count,
             momenta_in_event=args.momenta_count_in_event)
-    higgs_events = combined_filter(higgs_events)
+    higgs_events = combined_filter(higgs_events, momentum_lower=args.lower, momentum_higher=args.upper)
     invariant_masses_higgs = get_invariant_masses(higgs_events)
     #Comment out the background if you want to change functions etc.
     # Background (comment out all 3 lines to do quick work)
@@ -176,7 +179,7 @@ def main():
     if not args.onlyhiggs:
         bkg_events = parse_file(args.background_path, count=args.count,
                 momenta_in_event=args.momenta_count_in_event)
-        bkg_events = combined_filter(bkg_events)
+        bkg_events = combined_filter(bkg_events, momentum_lower=args.lower, momentum_higher=args.upper)
         invariant_masses_bkg = get_invariant_masses(bkg_events)
         invariant_masses_combined = invariant_masses_higgs + invariant_masses_bkg
     else:
