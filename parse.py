@@ -164,8 +164,6 @@ def main():
                 with the name of the datafile + '_count'.""")
     parser.add_argument('--onlyhiggs', action='store_true',
         help="""Only use the Higgs file (don't parse the background)""")
-    parser.add_argument('--lower', nargs=1, type=int, default=10, help='Lower momentum cut')
-    parser.add_argument('--upper', nargs=1, type=int, default=90, help='Upper momentum cut')
     parser.add_argument('--opt', action = 'store_true', help = 'uses optimised values')
 
     args = parser.parse_args()
