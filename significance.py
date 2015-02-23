@@ -36,6 +36,7 @@ def main():
     parser.add_argument('range2D', metavar = 'range2D', type = int, nargs = '+', 
                        help = 'choose x-axis for plot, xmin xmax step ymin ymax step')
     parser.add_argument('--out_opt', action = 'store_true', help = 'outputs invarant masses of optimised results')
+    parser.add_argument('--invmass', action = 'store_true', help = 'use invariant mass filter')
     args = parser.parse_args()
     xlabel = ''
     ylabel = ''
@@ -47,11 +48,17 @@ def main():
     if len(yrange) < 3:
         yrange = [0, 100, 20]
     # Get all the events
+    m = 0
     higgs_events = parse.parse_file('higgs.txt', momenta_in_event=True)
+    if args.invmass:
+        higgs_events = parse.invmass_threshold(higgs_events, m)
+
     filtered_higgs = {}
 
     if args.back:
         bkg_events = parse.parse_file('background.txt', momenta_in_event=True)
+        if args.invmass:
+            bkg_events = parse.invmass_threshold(bkg_events, m)
         filtered_bkg = {}
     
     if args.transverse:
@@ -110,7 +117,6 @@ def main():
                                                                      energy_higher = 0, deta = rap, dazi = az)
          
 
-
     # Higgs and background should have same keys
     keys = filtered_higgs.keys()
 
@@ -148,8 +154,8 @@ def main():
     if args.etaphi:
         opt_dphi, opt_deta = opt_x, opt_y
     
-
-    param = [opt_pT1, opt_pT2, opt_E1, opt_E2, opt_dphi, opt_deta]
+    m = 50
+    param = [opt_pT1, opt_pT2, opt_E1, opt_E2, opt_dphi, opt_deta, m]
     param = str(param)
     param = param.replace('[', '').replace(']', '')
 
