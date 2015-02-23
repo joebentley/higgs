@@ -37,6 +37,8 @@ def main():
                        help = 'choose x-axis for plot, xmin xmax step ymin ymax step')
     parser.add_argument('--out_opt', action = 'store_true', help = 'outputs invarant masses of optimised results')
     parser.add_argument('--invmass', action = 'store_true', help = 'use invariant mass filter')
+    parser.add_argument('--plot', action = 'store_true', help = 'plots the optimisation')
+    parser.add_argument('--nopreset', action = 'store_false', help = 'wipes all optimisation data')
     args = parser.parse_args()
     xlabel = ''
     ylabel = ''
@@ -54,7 +56,14 @@ def main():
         higgs_events = parse.invmass_threshold(higgs_events, m)
 
     filtered_higgs = {}
-
+    default_param = [0, 0, 0, 0, 0, 0, 20]
+    opt_p_T1, opt_p_T2, opt_E_1, opt_E_2, opt_dphi, opt_deta ,m = default_param
+    #Preset optimised values
+    if args.nopreset:
+        param = open('optimised.txt', 'r').read().split(',')
+        param = list(map(lambda x: float(x), param))
+        opt_p_T1, opt_p_T2, opt_E_1, opt_E_2, opt_dphi, opt_deta, m = param
+    
     if args.back:
         bkg_events = parse.parse_file('background.txt', momenta_in_event=True)
         if args.invmass:
@@ -133,14 +142,15 @@ def main():
     for k in keys:
         x.append(k[0])
         y.append(k[1])
-
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection = '3d')
-    ax.scatter(x, y, bins)
-    ax.set_xlabel(xlabel)
-    ax.set_ylabel(ylabel)
-    ax.set_title('Optimisation plot for ' + title + ' cuts.')
-    plt.show()
+    
+    if args.plot:
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection = '3d')
+        ax.scatter(x, y, bins)
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
+        ax.set_title('Optimisation plot for ' + title + ' cuts.')
+        plt.show()
 
     opt_x, opt_y,z_max  = get_largest(bins, x, y)
     higgs_opt = filtered_higgs[(opt_x, opt_y)]
@@ -154,7 +164,6 @@ def main():
     if args.etaphi:
         opt_dphi, opt_deta = opt_x, opt_y
     
-    m = 50
     param = [opt_pT1, opt_pT2, opt_E1, opt_E2, opt_dphi, opt_deta, m]
     param = str(param)
     param = param.replace('[', '').replace(']', '')
@@ -164,7 +173,6 @@ def main():
         output_opt.write(param)
         output_opt.close()
     
-        
 
 if __name__ == '__main__':
     main()
