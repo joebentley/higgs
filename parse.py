@@ -160,15 +160,24 @@ def main():
                 with the name of the datafile + '_count'.""")
     parser.add_argument('--onlyhiggs', action='store_true',
         help="""Only use the Higgs file (don't parse the background)""")
-
-
+    
+    parser.add_argument('--opt', action = 'store_true', help = 'uses optimised values')
 
     args = parser.parse_args()
+    
+    default_param = [4, 50, 20, 20, 0, 0]
+    p_T1, p_T2, E_1, E_2, dpi, deta = default_param 
+
+    if args.opt:
+        opt_param = open('optimised.txt', 'r').read().split(',')
+        opt_param = list(map(lambda x: float(x), opt_param))
+        p_T1, p_T2, E_1, E_2, dphi, deta = opt_param 
 
     # Higgs signal
     higgs_events = parse_file(args.higgs_path, count=args.count,
             momenta_in_event=args.momenta_count_in_event)
-    higgs_events = combined_filter(higgs_events)
+    higgs_events = combined_filter(higgs_events, num = 1, lower_momentum = p_T1, higher_momentum = p_T2, lower_energy = E1, higher_energy = E2, 
+                                   dphi = dphi, deta = deta)
     invariant_masses_higgs = get_invariant_masses(higgs_events)
     #Comment out the background if you want to change functions etc.
     # Background (comment out all 3 lines to do quick work)
