@@ -41,6 +41,8 @@ def main():
                         help='2D plot for azimithal angle')
     parser.add_argument('--eta', action='store_true',
                         help='2D plot for pseudorapidity')
+    parser.add_argument('--back', action='store_false',
+                        help="Don't use back")
 
     args = parser.parse_args()
 
@@ -49,7 +51,10 @@ def main():
     #bkg_events = parse.parse_file('background.txt', momenta_in_event=True)
     #2 Always use the number filter
     higgs_events = parse.number_threshold(higgs_events, 1)
-    #bkg_events = parse.number_threshold(bkg_events, 1)
+
+    if args.back:
+        bkg_events = parse.number_threshold(bkg_events, 1)
+
     #Now optional filters
     #a. transverse momenta 2 variables, we have Nt different momenta
     if args.transverse:
@@ -80,8 +85,10 @@ def main():
         E2 = list(map(lambda x: (E2f - E2i) * x/float(Ne) + E2i, E2))
         all_higgs_events = list(map(lambda x: parse.energy_threshold(higgs_events, x), E1))
         all_higgs_events = list(map(lambda x: parse.energy_threshold_2(higgs_events, x), E2))
-        #all_bkg_events = list(map(lambda x: parse.energy_threshold(bkg_events, x), E1))
-        #all_bkg_events = list(map(lambda x: parse.energy_threshold_2(bkg_events, x), E2))
+
+        if args.back:
+            all_bkg_events = list(map(lambda x: parse.energy_threshold(bkg_events, x), E1))
+            all_bkg_events = list(map(lambda x: parse.energy_threshold_2(bkg_events, x), E2))
 
         x_var = E1
         y_var = E2
@@ -98,22 +105,25 @@ def main():
         et2 = list(map(lambda x: (et2f - et2i) * x/float(Nt) + et2i, et2))
         all_higgs_events = list(map(lambda x: parse.eta_threshold(higgs_events, x), et1))
         all_higgs_events = list(map(lambda x: parse.eta_threshold_2(higgs_events, x), et2))
-        #all_bkg_events = list(map(lambda x: parse.eta_threshold(bkg_events, x), et1))
-        #all_bkg_events = list(map(lambda x: parse.eta_threshold_2(bkg_events, x), et2))
+
+        if args.back:
+            all_bkg_events = list(map(lambda x: parse.eta_threshold(bkg_events, x), et1))
+            all_bkg_events = list(map(lambda x: parse.eta_threshold_2(bkg_events, x), et2))
 
         x_var = et1
         y_var = et2'''
 
     #Invariant masses after all the filtering.
     invariant_masses_higgs = parse.get_invariant_masses(higgs_events)
-    invariant_masses_bkg = parse.get_invariant_masses(bkg_events)
-    invariant_masses_combined = invariant_masses_higgs + invariant_masses_bkg
 
+    if args.back:
+        invariant_masses_bkg = parse.get_invariant_masses(bkg_events)
+        invariant_masses_combined = invariant_masses_higgs + invariant_masses_bkg
+
+    # the invariant masses, pre filtering
     all_invariant_masses_higgs = list(map(lambda x: parse.get_invariant_masses(x), all_higgs_events))
-    all_invariant_masses_bkg = list(map(lambda x: parse.get_invariant_masses(x), all_bkg_events))
-
-
-
+    if args.back:
+        all_invariant_masses_bkg = list(map(lambda x: parse.get_invariant_masses(x), all_bkg_events))
 
     #Plotting the data
     #Cross section data
