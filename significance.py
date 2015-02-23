@@ -115,10 +115,6 @@ def main():
                                                                      num = 1, momentum_lower = 0,
                                                                      momentum_higher = 0, energy_lower = 0,
                                                                      energy_higher = 0, deta = rap, dazi = az)
-<<<<<<< HEAD
-=======
-         
->>>>>>> c6dcc12a265a9473566f06ae81b03677aa533ccc
 
     # Higgs and background should have same keys
     keys = filtered_higgs.keys()
@@ -146,22 +142,10 @@ def main():
     plt.show()
 
     opt_x, opt_y,z_max  = get_largest(bins, x, y)
-<<<<<<< HEAD
 
     higgs_opt = filtered_higgs[(opt_x, opt_y)]
     #bkg_opt = filtered_bkg[(opt_x, opt_y)]
 
-    if args.out_opt:
-        inv_higgs = parse.get_invariant_masses(higgs_opt)
-        #inv_bkg = parse.get_invariant_masses(bkg_opt)
-        out_higgs = open('outputIM_Higgs.txt', 'w')
-        out_higgs.write(str(inv_higgs))
-        out_higgs.close()
-
-=======
-    higgs_opt = filtered_higgs[(opt_x, opt_y)]
-    #bkg_opt = filtered_bkg[(opt_x, opt_y)]
-     
     opt_pT1, opt_pT2, opt_E1, opt_E2, opt_dphi, opt_deta = [0, 0, 0, 0, 0 ,0]
     if args.transverse:
         opt_pT1, opt_pT2 = opt_x, opt_y
@@ -169,7 +153,7 @@ def main():
         opt_E1, opt_E2 = opt_x, opt_y
     if args.etaphi:
         opt_dphi, opt_deta = opt_x, opt_y
-    
+
     m = 50
     param = [opt_pT1, opt_pT2, opt_E1, opt_E2, opt_dphi, opt_deta, m]
     param = str(param)
@@ -179,9 +163,7 @@ def main():
         output_opt = open('optimised.txt', 'w')
         output_opt.write(param)
         output_opt.close()
-    
-        
->>>>>>> c6dcc12a265a9473566f06ae81b03677aa533ccc
+
 
 if __name__ == '__main__':
     main()
