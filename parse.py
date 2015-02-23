@@ -78,6 +78,8 @@ def combined_filter(events, num=1, momentum_lower=4, momentum_higher=50, energy_
     for event in res:
         if len(event) > 2:
             raise ValueError
+
+    res = number_threshold(res, num)
     return res
 
 def get_invariant_masses(events):

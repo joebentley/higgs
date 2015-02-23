@@ -6,6 +6,13 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import argparse
 
+def get_largest(z, x, y):
+    z_max = sorted(z)[-1]
+    index = z.index(z_max)
+    x_max = x[index]
+    y_max = y[index]
+    return [x_max, y_max, z_max]
+
 def statistical_significance(signal, background):
     """ Calculate statistical significance given num. signal events
         and num. background events. """
@@ -28,7 +35,7 @@ def main():
     parser.add_argument('--etaphi', action = 'store_true', help = 'cuts both azimuthal and psudeorapidity difference squared')
     parser.add_argument('range2D', metavar = 'range2D', type = int, nargs = '+', 
                        help = 'choose x-axis for plot, xmin xmax step ymin ymax step')
-
+    parser.add_argument('--out_opt', action = 'store_true', help = 'outputs invarant masses of optimised results')
     args = parser.parse_args()
     xlabel = ''
     ylabel = ''
@@ -126,6 +133,19 @@ def main():
     ax.set_ylabel(ylabel)
     ax.set_title('Optimisation plot for ' + title + ' cuts.')
     plt.show()
+
+    opt_x, opt_y,z_max  = get_largest(bins, x, y)
+    
+    higgs_opt = filtered_higgs[(opt_x, opt_y)]
+    #bkg_opt = filtered_bkg[(opt_x, opt_y)]
+    
+    if args.out_opt:
+        inv_higgs = parse.get_invariant_masses(higgs_opt)
+        #inv_bkg = parse.get_invariant_masses(bkg_opt)
+        out_higgs = open('outputIM_Higgs.txt', 'w')
+        out_higgs.write(str(inv_higgs))
+        out_higgs.close()
+        
 
 if __name__ == '__main__':
     main()
