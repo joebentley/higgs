@@ -176,8 +176,8 @@ def main():
     # Higgs signal
     higgs_events = parse_file(args.higgs_path, count=args.count,
             momenta_in_event=args.momenta_count_in_event)
-    higgs_events = combined_filter(higgs_events, num = 1, lower_momentum = p_T1, higher_momentum = p_T2, lower_energy = E1, higher_energy = E2, 
-                                   dphi = dphi, deta = deta)
+    higgs_events = combined_filter(higgs_events, num = 1, momentum_lower = p_T1, momentum_higher = p_T2, energy_lower = E_1, energy_higher = E_2, 
+                                   deta = deta, dazi = dphi)
     invariant_masses_higgs = get_invariant_masses(higgs_events)
     #Comment out the background if you want to change functions etc.
     # Background (comment out all 3 lines to do quick work)

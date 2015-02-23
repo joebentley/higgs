@@ -151,7 +151,7 @@ def main():
 
     param = [opt_pT1, opt_pT2, opt_E1, opt_E2, opt_dphi, opt_deta]
     param = str(param)
-    param.replace('[', '').replace(']', '')
+    param = param.replace('[', '').replace(']', '')
 
     if args.out_opt:
         output_opt = open('optimised.txt', 'w')
