@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from math import sqrt
+from math import radians
 import parse
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -63,7 +64,7 @@ def main():
         param = open('optimised.txt', 'r').read().split(',')
         param = list(map(lambda x: float(x), param))
         opt_p_T1, opt_p_T2, opt_E_1, opt_E_2, opt_dphi, opt_deta, m = param
-    
+
     if args.back:
         bkg_events = parse.parse_file('background.txt', momenta_in_event=True)
         if args.invmass:
@@ -107,8 +108,9 @@ def main():
                                                                           momentum_higher = 0, energy_lower = lower,
                                                                           energy_higher = higher, deta = 0, dazi = 0)
     if args.etaphi:
-        eta = range(xrange[0], xrange[1], xrange[2])
-        phi = range(yrange[0], yrange[1], yrange[2])
+        eta = list(map(radians, range(xrange[0], xrange[1], xrange[2])))
+        phi = list(map(radians, range(yrange[0], yrange[1], yrange[2])))
+        print(eta)
         ylabel = '$d\eta^2$'
         xlabel = '$d\phi^2$'
         title = 'azimuthal angle, and pseudorapidity'
@@ -141,7 +143,7 @@ def main():
     for k in keys:
         x.append(k[0])
         y.append(k[1])
-    
+
     if args.plot:
         fig = plt.figure()
         ax = fig.add_subplot(111, projection = '3d')
@@ -173,7 +175,7 @@ def main():
         output_opt = open('optimised.txt', 'w')
         output_opt.write(param)
         output_opt.close()
-    
+
 
 
 if __name__ == '__main__':
