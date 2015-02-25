@@ -66,9 +66,12 @@ class Event:
                     deta = abs(self.momenta[i].eta() - self.momenta[j].eta())
                     diff.append(deta**2)
 
-        smallest = sorted(diff)[0]
-        largest = sorted(diff)[-1]
-        return largest
+        if len(diff) == 0:
+            return 0
+        else:
+            smallest = sorted(diff)[0]
+            largest = sorted(diff)[-1]
+            return largest
 
     def invariant_mass(self):
         """ Calculate the invariant mass from the four momenta. """
