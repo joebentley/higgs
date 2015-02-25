@@ -114,7 +114,6 @@ def main():
     if args.etaphi:
         eta = list(map(radians, range(xrange[0], xrange[1], xrange[2])))
         phi = list(map(radians, range(yrange[0], yrange[1], yrange[2])))
-        print(eta)
         ylabel = '$d\eta^2$'
         xlabel = '$d\phi^2$'
         title = 'azimuthal angle, and pseudorapidity'
