@@ -56,7 +56,7 @@ def main():
     higgs_events = parse.parse_file('higgs.txt', momenta_in_event=True)
     if not args.invmass:
         higgs_events = parse.invmass_threshold(higgs_events, m)
-    
+
     res = 0.05
     filtered_higgs = {}
     default_param = [0, 0, 0, 0, 0, 0, 20]
@@ -66,8 +66,8 @@ def main():
         param = open('optimised.txt', 'r').read().split(',')
         param = list(map(lambda x: float(x), param))
         opt_p_T1, opt_p_T2, opt_E_1, opt_E_2, opt_dphi, opt_deta, m = param
-    
-            
+
+
 
     if args.back:
         bkg_events = parse.parse_file('background.txt', momenta_in_event=True)
@@ -75,7 +75,7 @@ def main():
             bkg_events = parse.invmass_threshold(bkg_events, m)
         filtered_bkg = {}
 
-    if args.transverse: 
+    if args.transverse:
     # Apply a series of different filters in turn
         lower_momentum = range(xrange[0], xrange[1], xrange[2])
         higher_momentum = range(yrange[0], yrange[1], yrange[2])
