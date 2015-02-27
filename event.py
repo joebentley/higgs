@@ -14,9 +14,10 @@ class Event:
     def __len__(self):
         return len(self.momenta)
 
-    def filter_highest(self, n):
+    def filter_highest_pt(self, n):
         """ Only use n highest tranverse momentum. """
         self.momenta = sorted(self.momenta, key=lambda x: x.transverse())[:2]
+        
 
     def filter_2_angles(self):
         #get all the angles

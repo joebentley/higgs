@@ -49,8 +49,9 @@ def deta_threshold(events, eta):
 
 
 def dazi_threshold(events, azi):
-    return list(filter(lambda x: x.azi_diff_max() > azi**2, events))
-
+    events = list(map(lambda x: x.filter_highest_pt(2), events))
+    #return list(filter(lambda x: x.azi_diff_max() > azi**2, events))
+    return events
 def invmass_threshold(events, m):
     return list(filter(lambda x: x.invariant_mass()>m, events))
 
