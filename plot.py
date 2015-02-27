@@ -38,7 +38,7 @@ def fit_bkg(x, y, res=3, x_min=120, x_max=150, length = 100):
 def main():
     parser = argparse.ArgumentParser(description = 'Generate histogram from Higgs and background data')
     parser.add_argument('--not_comb', action = 'store_true', help='Do not plot the combined data')
-    parser.add_argument('--higgs', action = 'store_true', help = 'Plots the histogram frmo only the Higgs signal')
+    parser.add_argument('--higgs', action = 'store_true', help = 'Plots the histogram from only the Higgs signal')
     parser.add_argument('--bkg', action = 'store_true', help = 'Plots the histogram from only the background')
     parser.add_argument('--norm', action = 'store_true', help = 'Normalise all plots')
     parser.add_argument('--ratio', action = 'store_true', help = 'Use ratio to calculate the weights of higgs and bkgs.')

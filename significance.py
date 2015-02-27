@@ -39,7 +39,7 @@ def main():
     parser.add_argument('--out_opt', action = 'store_true', help = 'outputs invarant masses of optimised results')
     parser.add_argument('--invmass', action = 'store_true', help = 'use invariant mass filter')
     parser.add_argument('--plot', action = 'store_true', help = 'plots the optimisation')
-    parser.add_argument('--nopreset', action = 'store_false', help = 'wipes all optimisation data')
+    parser.add_argument('--nopreset', action = 'store_false', help = "don't use optimisation data")
     parser.add_argument('--choose_range', action = 'store_false', help = 'takes the old optimised value (from a previous run) and looks 2 parameters (at a chosen resolution)')
     args = parser.parse_args()
     xlabel = ''
@@ -56,18 +56,18 @@ def main():
     higgs_events = parse.parse_file('higgs.txt', momenta_in_event=True)
     if not args.invmass:
         higgs_events = parse.invmass_threshold(higgs_events, m)
-    
+
     res = 0.05
     filtered_higgs = {}
     default_param = [0, 0, 0, 0, 0, 0, 20]
-    opt_p_T1, opt_p_T2, opt_E_1, opt_E_2, opt_dphi, opt_deta ,m = default_param
-    #Preset optimised values
+    opt_p_T1, opt_p_T2, opt_E_1, opt_E_2, opt_dphi, opt_deta, m = default_param
+
+    # Preset optimised values
     if args.nopreset:
         param = open('optimised.txt', 'r').read().split(',')
         param = list(map(lambda x: float(x), param))
         opt_p_T1, opt_p_T2, opt_E_1, opt_E_2, opt_dphi, opt_deta, m = param
-    
-            
+
 
     if args.back:
         bkg_events = parse.parse_file('background.txt', momenta_in_event=True)
@@ -75,7 +75,7 @@ def main():
             bkg_events = parse.invmass_threshold(bkg_events, m)
         filtered_bkg = {}
 
-    if args.transverse: 
+    if args.transverse:
     # Apply a series of different filters in turn
         lower_momentum = range(xrange[0], xrange[1], xrange[2])
         higher_momentum = range(yrange[0], yrange[1], yrange[2])
@@ -114,7 +114,6 @@ def main():
     if args.etaphi:
         eta = list(map(radians, range(xrange[0], xrange[1], xrange[2])))
         phi = list(map(radians, range(yrange[0], yrange[1], yrange[2])))
-        print(eta)
         ylabel = '$d\eta^2$'
         xlabel = '$d\phi^2$'
         title = 'azimuthal angle, and pseudorapidity'
