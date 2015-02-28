@@ -34,9 +34,9 @@ def main():
     parser.add_argument('--transverse', action='store_true', help='transverse cuts')
     parser.add_argument('--energy', action = 'store_true', help = 'energy cuts')
     parser.add_argument('--etaphi', action = 'store_true', help = 'cuts both azimuthal and psudeorapidity difference squared')
-    parser.add_argument('range2D', metavar = 'range2D', type = int, nargs = '+',
-                       help = 'choose x-axis for plot, xmin xmax step ymin ymax step')
-    parser.add_argument('--out_opt', action = 'store_true', help = 'outputs invarant masses of optimised results')
+##    parser.add_argument('range2D', metavar = 'range2D', type = int, nargs = '+',
+##                       help = 'choose x-axis for plot, xmin xmax step ymin ymax step')
+    parser.add_argument('--out_opt', action = 'store_false', help = 'outputs invarant masses of optimised results')
     parser.add_argument('--invmass', action = 'store_true', help = 'use invariant mass filter')
     parser.add_argument('--plot', action = 'store_true', help = 'plots the optimisation')
     parser.add_argument('--nopreset', action = 'store_false', help = "don't use optimisation data")
@@ -45,12 +45,19 @@ def main():
     xlabel = ''
     ylabel = ''
     title = ''
-    xrange = args.range2D[0:3]
-    if len(xrange)<3:
-        xrange = [0, 100, 20]
-    yrange = args.range2D[3:len(args.range2D)]
-    if len(yrange) < 3:
-        yrange = [0, 100, 20]
+
+    xrange = [0, 100, 20]
+    yrange = [0, 100, 20]
+    
+        
+    
+##    if not args.choose_range:
+##        xrange = args.range2D[0:3]
+##        if len(xrange)<3:
+##            xrange = [0, 100, 20]
+##        yrange = args.range2D[3:len(args.range2D)]
+##        if len(yrange) < 3:
+##            yrange = [0, 100, 20]
     # Get all the events
     m = 0
     higgs_events = parse.parse_file('higgs.txt', momenta_in_event=True)
@@ -68,6 +75,22 @@ def main():
         param = list(map(lambda x: float(x), param))
         opt_p_T1, opt_p_T2, opt_E_1, opt_E_2, opt_dphi, opt_deta, m = param
 
+        res = 1
+        if args.choose_range:
+            a = range(0, 2 * int(1/res))
+            a = list(map(lambda x: res * (x - res/2), a))
+            ranges = []
+            for p in param:
+                ranges.append(list(map(lambda x: x + p, a)))
+    
+    ranges = [
+                range(20, 60, 20),
+                range(20, 60, 20),
+                range(20, 60, 20),
+                range(20, 60, 20),
+                range(0, 6, 2),
+                range(0, 3, 1),
+            ]
 
     if args.back:
         bkg_events = parse.parse_file('background.txt', momenta_in_event=True)
@@ -77,8 +100,10 @@ def main():
 
     if args.transverse:
     # Apply a series of different filters in turn
-        lower_momentum = range(xrange[0], xrange[1], xrange[2])
-        higher_momentum = range(yrange[0], yrange[1], yrange[2])
+##        lower_momentum = range(xrange[0], xrange[1], xrange[2])
+##        higher_momentum = range(yrange[0], yrange[1], yrange[2])
+        lower_momentum = ranges[0]
+        higher_momentum = ranges[1]
         xlabel = '$p_{T1}$'
         ylabel = '$p_{T2}$'
         title = 'transverse momenta'
@@ -95,8 +120,10 @@ def main():
                                                                           energy_higher = 0, deta = 0, dazi = 0)
 
     if args.energy:
-        lower_energy = range(xrange[0], xrange[1], xrange[2])
-        higher_energy = range(yrange[0], yrange[1], yrange[2])
+##        lower_energy = range(xrange[0], xrange[1], xrange[2])
+##        higher_energy = range(yrange[0], yrange[1], yrange[2])
+        lower_energy = ranges[2]
+        higher_energy = ranges[3]
         xlabel = '$E_1$'
         ylabel = '$E_2$'
         title = 'Energy'
@@ -112,8 +139,10 @@ def main():
                                                                           momentum_higher = 0, energy_lower = lower,
                                                                           energy_higher = higher, deta = 0, dazi = 0)
     if args.etaphi:
-        eta = list(map(radians, range(xrange[0], xrange[1], xrange[2])))
-        phi = list(map(radians, range(yrange[0], yrange[1], yrange[2])))
+##        eta = list(map(radians, range(xrange[0], xrange[1], xrange[2])))
+##        phi = list(map(radians, range(yrange[0], yrange[1], yrange[2])))
+        eta = ranges[4]
+        phi = ranges[5]
         ylabel = '$d\eta^2$'
         xlabel = '$d\phi^2$'
         title = 'azimuthal angle, and pseudorapidity'

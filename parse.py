@@ -45,13 +45,12 @@ def energy_threshold_2(events, E):
     return events2
 
 def deta_threshold(events, eta):
-    return list(filter(lambda x: x.eta_diff_max() > eta**2, events))
-
-
+    res = list(filter(lambda x: x.eta_diff_max() > eta**2, events))
+    return res
+    
 def dazi_threshold(events, azi):
-    events = list(map(lambda x: x.filter_highest_pt(2), events))
-    #return list(filter(lambda x: x.azi_diff_max() > azi**2, events))
-    return events
+    return list(filter(lambda x: x.azi_diff_max() > azi**2, events))
+
 def invmass_threshold(events, m):
     return list(filter(lambda x: x.invariant_mass()>m, events))
 
@@ -60,11 +59,10 @@ def invmass_threshold(events, m):
 def combined_filter(events, num=1, momentum_lower=4, momentum_higher=50, energy_lower=20, energy_higher = 20,
                     deta = 0, dazi = 0, invm = 120):
     #Filtering events
-
     #only show events with at least 2 momenta
     res = number_threshold(events, num)
     print("Number filtered")
-
+    
     res = transverse_threshold(res, momentum_lower)
     res = transverse_threshold_2(res, momentum_higher)
     print("Momenta filtered")
@@ -73,15 +71,15 @@ def combined_filter(events, num=1, momentum_lower=4, momentum_higher=50, energy_
     res = energy_threshold_2(res, energy_higher)
     print("Energy filtered")
 
+    #Pick2 highest p_T
+    for event in res:
+        event = event.filter_highest_pt(2)
+    
+    print('Chose 2 highest p_T photons')
     res = deta_threshold(res, deta)
     print("Pseudorapidity filtered")
     res = dazi_threshold(res, dazi)
     print("Azimuthal filtered")
-
-    for event in res:
-        event.filter_highest(2)
-        #event.filter_2_angles()
-
 
     for event in res:
         if len(event) > 2:
