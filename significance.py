@@ -69,28 +69,42 @@ def main():
     default_param = [0, 0, 0, 0, 0, 0, 20]
     opt_p_T1, opt_p_T2, opt_E_1, opt_E_2, opt_dphi, opt_deta, m = default_param
 
+    ranges = [
+            range(1, 11, 2),
+            range(1, 11, 2),
+            range(1, 11, 2),
+            range(1, 11, 2),
+            range(0, 6, 2),
+            range(0, 3, 1),
+         ]
+    
     # Preset optimised values
     if args.nopreset:
         param = open('optimised.txt', 'r').read().split(',')
         param = list(map(lambda x: float(x), param))
         opt_p_T1, opt_p_T2, opt_E_1, opt_E_2, opt_dphi, opt_deta, m = param
 
-        res = 1
+        #When you use an automatic range, use these parameters
+        
+        ranges = [
+                    range(1, 61, 20),
+                    range(1, 61, 20),
+                    range(1, 61, 20),
+                    range(1, 61, 20),
+                    range(0, 6, 2),
+                    range(0, 3, 1),
+                 ]
+        
         if args.choose_range:
-            a = range(0, 2 * int(1/res))
-            a = list(map(lambda x: res * (x - res/2), a))
+            lim = input('Outer limits for optimisation: ')
+            lim = float(lim)
+
+            a = [-lim, 0, lim]
             ranges = []
             for p in param:
                 ranges.append(list(map(lambda x: x + p, a)))
     
-    ranges = [
-                range(20, 60, 20),
-                range(20, 60, 20),
-                range(20, 60, 20),
-                range(20, 60, 20),
-                range(0, 6, 2),
-                range(0, 3, 1),
-            ]
+            print(ranges) 
 
     if args.back:
         bkg_events = parse.parse_file('background.txt', momenta_in_event=True)
@@ -119,6 +133,7 @@ def main():
                                                                           momentum_higher=higher, energy_lower=0,
                                                                           energy_higher = 0, deta = 0, dazi = 0)
 
+                print('Finished for pt_1 =  ' + str(lower) + ' and pt_2 = ' + str(higher))
     if args.energy:
 ##        lower_energy = range(xrange[0], xrange[1], xrange[2])
 ##        higher_energy = range(yrange[0], yrange[1], yrange[2])
@@ -138,6 +153,8 @@ def main():
                                                                           num = 1, momentum_lower = 0,
                                                                           momentum_higher = 0, energy_lower = lower,
                                                                           energy_higher = higher, deta = 0, dazi = 0)
+
+                print('Finished for E_1 =  ' + str(lower) + ' and E_2 = ' + str(higher))
     if args.etaphi:
 ##        eta = list(map(radians, range(xrange[0], xrange[1], xrange[2])))
 ##        phi = list(map(radians, range(yrange[0], yrange[1], yrange[2])))
@@ -159,6 +176,7 @@ def main():
                                                                      momentum_higher = 0, energy_lower = 0,
                                                                      energy_higher = 0, deta = rap, dazi = az)
 
+                print('Finished for phi =  ' + str(az) + ' and eta = ' + str(rap))
     # Higgs and background should have same keys
     keys = filtered_higgs.keys()
 
