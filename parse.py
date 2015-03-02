@@ -233,9 +233,18 @@ def main():
 
     print("Writing invariant masses to file")
     if args.onlyhiggs:
+        out_higgs = open('outputIM_Higgs.txt', 'r+')
+        out_higgs.truncate()
+        out_higgs.close()
         out_higgs = open('outputIM_Higgs.txt', 'w')
         out_higgs.write(str(invariant_masses_higgs))
     else:
+        out_bkg = open('outputIM_bkg.txt', 'r+')
+        out_bkg.truncate()
+        out_bkg.close()
+        out_cmb = open('outputIM_cmb.txt', 'r+')
+        out_cmb.truncate()
+        out_cmb.close()
         out_bkg = open('outputIM_bkg.txt', 'w')
         out_bkg.write(str(invariant_masses_bkg))
         out_comb = open('outputIM_cmb.txt', 'w')
