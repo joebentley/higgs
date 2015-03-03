@@ -54,14 +54,19 @@ def dazi_threshold(events, azi):
 def invmass_threshold(events, m):
     return list(filter(lambda x: x.invariant_mass()>m, events))
 
+def invmass_limit(events, m):
+    return list(filter(lambda x: x.invariant_mass() < m, events))
 
 #combined filter
 def combined_filter(events, num=1, momentum_lower=4, momentum_higher=50, energy_lower=20, energy_higher = 20,
-                    deta = 0, dazi = 0, invm = 120):
+                    deta = 0, dazi = 0, invm1 = 113, invm2 = 132):
     #Filtering events
     #only show events with at least 2 momenta
     res = number_threshold(events, num)
     print("Number filtered")
+    #Exclude in lower invariant mass range
+    res = invmass_threshold(res, invm1)
+    print("Lower Inv mass filtered")
     
     res = transverse_threshold(res, momentum_lower)
     res = transverse_threshold_2(res, momentum_higher)
@@ -85,8 +90,9 @@ def combined_filter(events, num=1, momentum_lower=4, momentum_higher=50, energy_
         if len(event) > 2:
             raise ValueError
 
-    res = invmass_threshold(res, invm)
-    print("Inv mass filtered")
+    #Exclude higher invariant mass range
+    res = invmass_limit(res, invm2)
+    print('Upper invariant mass')
     print("Finished filtering")
     return res
 
