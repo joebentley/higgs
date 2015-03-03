@@ -48,9 +48,9 @@ def main():
 
     xrange = [0, 100, 20]
     yrange = [0, 100, 20]
-    
-        
-    
+
+
+
 ##    if not args.choose_range:
 ##        xrange = args.range2D[0:3]
 ##        if len(xrange)<3:
@@ -77,15 +77,16 @@ def main():
             range(0, 6, 2),
             range(0, 3, 1),
          ]
-    
+
     # Preset optimised values
     if args.nopreset:
         param = open('optimised.txt', 'r').read().split(',')
         param = list(map(lambda x: float(x), param))
         opt_p_T1, opt_p_T2, opt_E_1, opt_E_2, opt_dphi, opt_deta, m = param
 
-        #When you use an automatic range, use these parameters
-        
+        # When you use an automatic range, use these parameters
+        # Each range corresponds to the default ranges for each filter
+        # in order: transverse momenta 1 & 2, energies 1 & 2, azimuthal, pseudorapidity
         ranges = [
                     range(1, 61, 20),
                     range(1, 61, 20),
@@ -94,7 +95,7 @@ def main():
                     range(0, 6, 2),
                     range(0, 3, 1),
                  ]
-        
+
         if args.choose_range:
             lim = input('Outer limits for optimisation: ')
             lim = float(lim)
@@ -103,8 +104,8 @@ def main():
             ranges = []
             for p in param:
                 ranges.append(list(map(lambda x: x + p, a)))
-    
-            print(ranges) 
+
+            print(ranges)
 
     if args.back:
         bkg_events = parse.parse_file('background.txt', momenta_in_event=True)
