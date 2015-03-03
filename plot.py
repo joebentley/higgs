@@ -6,6 +6,12 @@ from math import *
 import numpy as np
 import scipy.optimize as opt
 
+def statistical_significance(signal, background):
+    """ Calculate statistical significance given num. signal events
+        and num. background events. """
+    return signal / sqrt(signal + background)
+
+
 def parse_file(path, count=False):
     with open(path) as data_file:
         raw = data_file.read().replace('[', '').replace(']', '').split(',')
@@ -77,6 +83,14 @@ def main():
     hist_bkg = list(map(lambda x: x*w_bkg, hist_bkg))
     hist_comb = list(map(lambda x, y: x + y, hist_higgs, hist_bkg))
 
+    # Calculate the statistical significance of the higgs in the mass range
+    for key, val in enumerate(bins):
+        if val == 120:
+            higgs_sum = sum(hist_higgs[key-10:key+10])
+            back_sum = sum(hist_bkg[key-10:key+10])
+
+            print('In mass window 110 to 130: ')
+            print('sigma = ' + str(statistical_significance(higgs_sum, back_sum)))
 
 
     bins = bins[0:len(bins) - 1]

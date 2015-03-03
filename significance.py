@@ -8,7 +8,10 @@ from mpl_toolkits.mplot3d import Axes3D
 import argparse
 
 def get_largest(z, x, y):
-    z_max = sorted(z)[-1]
+    if len(z) == 0:
+        return [0, 0, 0]
+
+    z_max = max(z)
     index = z.index(z_max)
     x_max = x[index]
     y_max = y[index]
