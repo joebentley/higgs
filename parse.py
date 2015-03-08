@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import sys, argparse
+import sys, argparse, pickle
 import matplotlib.pyplot as plt
 from multiprocessing import Pool
 
@@ -16,9 +16,12 @@ def number_threshold(events, n):
 
 #Transverse momentum filter
 def transverse_threshold(events, p_T):
+    new_events = []
     for event in events:
         event.momenta = list(filter(lambda x: x.transverse() > p_T, event.momenta))
-    return events
+        if len(event.momenta) > 0:
+            new_events.append(event)
+    return new_events
 
 #Keeps the 20GeV transverse momentum
 def transverse_threshold_2(events, p_T):
@@ -28,13 +31,17 @@ def transverse_threshold_2(events, p_T):
             # If there are any transverse momenta > p_T, that event is valid
             if momenta.transverse() > p_T:
                 events2.append(event)
+                break
     return events2
 
 #Energy filter
 def energy_threshold(events, E):
+    new_events = []
     for event in events:
         event.momenta = list(filter(lambda x: x.energy > E, event.momenta))
-    return events
+        if len(event.momenta) > 0:
+            new_events.append(event)
+    return new_events
 
 def energy_threshold_2(events, E):
     events2 = []
@@ -42,6 +49,7 @@ def energy_threshold_2(events, E):
         for momenta in event.momenta:
             if momenta.energy > E:
                 events2.append(event)
+                break
     return events2
 
 def deta_threshold(events, eta):
@@ -81,9 +89,9 @@ def combined_filter(events, num=1, momentum_lower=4, momentum_higher=50, energy_
         event = event.filter_highest_pt(2)
 
     print('Chose 2 highest p_T photons')
-    res = deta_threshold(res, deta)
+    #res = deta_threshold(res, deta)
     print("Pseudorapidity filtered")
-    res = dazi_threshold(res, dazi)
+    #res = dazi_threshold(res, dazi)
     print("Azimuthal filtered")
 
     for event in res:
@@ -91,7 +99,7 @@ def combined_filter(events, num=1, momentum_lower=4, momentum_higher=50, energy_
             raise ValueError
 
     #Exclude higher invariant mass range
-    res = invmass_limit(res, invm2)
+    #res = invmass_limit(res, invm2)
     print('Upper invariant mass')
     print("Finished filtering")
     return res
@@ -239,22 +247,24 @@ def main():
 
     print("Writing invariant masses to file")
     if args.onlyhiggs:
-        out_higgs = open('outputIM_Higgs.txt', 'r+')
-        out_higgs.truncate()
-        out_higgs.close()
+        #out_higgs = open('outputIM_Higgs.txt', 'r+')
+        #out_higgs.truncate()
+        #out_higgs.close()
         out_higgs = open('outputIM_Higgs.txt', 'w')
         out_higgs.write(str(invariant_masses_higgs))
     else:
-        out_bkg = open('outputIM_bkg.txt', 'r+')
-        out_bkg.truncate()
-        out_bkg.close()
-        out_cmb = open('outputIM_cmb.txt', 'r+')
-        out_cmb.truncate()
-        out_cmb.close()
-        out_bkg = open('outputIM_bkg.txt', 'w')
-        out_bkg.write(str(invariant_masses_bkg))
-        out_comb = open('outputIM_cmb.txt', 'w')
-        out_comb.write(str(invariant_masses_combined))
+        #out_bkg = open('outputIM_bkg.txt', 'r+')
+        #out_bkg.truncate()
+        #out_bkg.close()
+        #out_cmb = open('outputIM_cmb.txt', 'r+')
+        #out_cmb.truncate()
+        #out_cmb.close()
+        with open('outputIM_Higgs.txt', 'wb') as f:
+            pickle.dump(invariant_masses_higgs, f)
+        with open('outputIM_bkg.txt', 'wb') as f:
+            pickle.dump(invariant_masses_bkg, f)
+        with open('outputIM_cmb.txt', 'wb') as f:
+            pickle.dump(invariant_masses_combined, f)
 
 if __name__ == '__main__':
     main()

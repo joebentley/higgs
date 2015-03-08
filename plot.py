@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import pickle, math
 import matplotlib.pyplot as plt
 import sys, argparse
 from math import *
@@ -13,9 +14,8 @@ def statistical_significance(signal, background):
 
 
 def parse_file(path, count=False):
-    with open(path) as data_file:
-        raw = data_file.read().replace('[', '').replace(']', '').split(',')
-        return list(map(float, raw))
+    with open(path, 'rb') as data_file:
+        return pickle.load(data_file)
 
 def fit_bkg(x, y, res=3, x_min=120, x_max=150, length = 100):
     #Fit exp
@@ -73,24 +73,36 @@ def main():
     print('Backr weighting:', w_bkg)
 
     #Resolution of histogram
-    res = 3
+    res = 1000
     #Use numpy to manually set up each histogram so the weights can be applied to each and recombined at the end.
-    bins = list(map(lambda x: res * x, range(0, int(sorted(invariant_masses_combined)[-1]))))
-    hist_higgs, bins = np.histogram(invariant_masses_higgs, bins)
-    hist_bkg, bins = np.histogram(invariant_masses_bkg, bins)
+    #bins = list(map(lambda x: res * x, range(0, int(sorted(invariant_masses_combined)[-1]))))
+
+    hist_higgs, bins_higgs = np.histogram(invariant_masses_higgs, res)
+    hist_bkg, bins_bkg = np.histogram(invariant_masses_bkg, res)
 
     hist_higgs = list(map(lambda x: x*w_higgs, hist_higgs))
     hist_bkg = list(map(lambda x: x*w_bkg, hist_bkg))
-    hist_comb = list(map(lambda x, y: x + y, hist_higgs, hist_bkg))
 
-    # Calculate the statistical significance of the higgs in the mass range
-    for key, val in enumerate(bins):
-        if val == 120:
-            higgs_sum = sum(hist_higgs[key-10:key+10])
-            back_sum = sum(hist_bkg[key-10:key+10])
+    hist_comb, bins = np.histogram(invariant_masses_higgs + invariant_masses_bkg, res)
 
-            print('In mass window 110 to 130: ')
-            print('sigma = ' + str(statistical_significance(higgs_sum, back_sum)))
+    # Get rid of zero values? (TODO: change this)
+    hist_comb[0] = 0
+
+    # Get the bins for the mass range and then find the statistical
+    # significance of the higgs in the mass range
+    x = np.array(range(120, 140))
+    indices_higgs = np.digitize(x, bins_higgs)
+    indices_bkg = np.digitize(x, bins_bkg)
+
+    sum_higgs = 0
+    sum_bkg = 0
+    for (index_higgs, index_bkg) in zip(indices_higgs, indices_higgs):
+        sum_higgs += hist_higgs[index_higgs]
+        sum_bkg += hist_bkg[index_bkg]
+
+
+    print('In mass window 110 to 130: ')
+    print('sigma = ' + str(statistical_significance(sum_higgs, sum_bkg)))
 
 
     bins = bins[0:len(bins) - 1]
@@ -103,20 +115,20 @@ def main():
         hist_bkg = list(map(lambda x: x/sum_bkg, hist_bkg))
         hist_comb = list(map(lambda x: x/sum_comb, hist_comb))
 
-    bkg_x, bkg_y = fit_bkg(bins, hist_bkg, res)
+    #bkg_x, bkg_y = fit_bkg(bins, hist_bkg, res)
 
     if not args.not_comb:
-        plt.bar(bins, hist_comb, label = 'Higgs + Background', color='b', width = res)
+        plt.bar(bins, hist_comb, label = 'Higgs + Background', color='b')
 
     if args.fit_bkg:
         plt.plot(bkg_x, bkg_y, label = 'Background line', color = 'r')
 
 
     if args.higgs:
-        plt.bar(bins, hist_higgs, label = 'Higgs', color='r', width = res)
+        plt.bar(bins, hist_higgs, label = 'Higgs', color='r')
 
     if args.bkg:
-        plt.bar(bins, hist_bkg, label = 'Background', color='g', width = res)
+        plt.bar(bins, hist_bkg, label = 'Background', color='g')
 
     plt.xlabel('$m_{\gamma \gamma}$ (GeV/$c^2$)')
     plt.ylabel('Frequency')
