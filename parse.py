@@ -47,7 +47,7 @@ def energy_threshold_2(events, E):
 def deta_threshold(events, eta):
     res = list(filter(lambda x: x.eta_diff_max() > eta**2, events))
     return res
-    
+
 def dazi_threshold(events, azi):
     return list(filter(lambda x: x.azi_diff_max() > azi**2, events))
 
@@ -59,7 +59,7 @@ def invmass_limit(events, m):
 
 #combined filter
 def combined_filter(events, num=1, momentum_lower=4, momentum_higher=50, energy_lower=20, energy_higher = 20,
-                    deta = 0, dazi = 0, invm1 = 113, invm2 = 132):
+                    deta = 0, dazi = 0, invm1 = 100, invm2 = 200):
     #Filtering events
     #only show events with at least 2 momenta
     res = number_threshold(events, num)
@@ -67,7 +67,7 @@ def combined_filter(events, num=1, momentum_lower=4, momentum_higher=50, energy_
     #Exclude in lower invariant mass range
     res = invmass_threshold(res, invm1)
     print("Lower Inv mass filtered")
-    
+
     res = transverse_threshold(res, momentum_lower)
     res = transverse_threshold_2(res, momentum_higher)
     print("Momenta filtered")
@@ -79,7 +79,7 @@ def combined_filter(events, num=1, momentum_lower=4, momentum_higher=50, energy_
     #Pick2 highest p_T
     for event in res:
         event = event.filter_highest_pt(2)
-    
+
     print('Chose 2 highest p_T photons')
     res = deta_threshold(res, deta)
     print("Pseudorapidity filtered")
@@ -178,19 +178,19 @@ def main():
 
     args = parser.parse_args()
     default_param = [4, 50, 20, 20, 0, 0, 50]
-    p_T1, p_T2, E_1, E_2, dpi, deta, m = default_param
+    p_T1, p_T2, E_1, E_2, dphi, deta, m = default_param
 
     if args.opt:
         opt_param = open('optimised.txt', 'r').read().split(',')
         opt_param = list(map(lambda x: float(x), opt_param))
-        p_T1, p_T2, E_1, E_2, dphi, deta, m = opt_param
+        p_T1, p_T2, E_1, E_2, dphi, deta, m, m2 = opt_param
 
     # Higgs signal
     higgs_events = parse_file(args.higgs_path, count=args.count,
             momenta_in_event=args.momenta_count_in_event)
     print("Parsed higgs")
     higgs_events = combined_filter(higgs_events, num = 1, momentum_lower = p_T1, momentum_higher = p_T2, energy_lower = E_1, energy_higher = E_2,
-                                   deta = deta, dazi = dphi, invm = m)
+                                   deta = deta, dazi = dphi)
     print("Filtered higgs")
     invariant_masses_higgs = get_invariant_masses(higgs_events)
     print("Got invariant masses higgs")
@@ -201,7 +201,7 @@ def main():
                 momenta_in_event=args.momenta_count_in_event)
         print("Parsed background")
         bkg_events = combined_filter(bkg_events, num = 1, momentum_lower = p_T1, momentum_higher = p_T2, energy_lower = E_1, energy_higher = E_2,
-                                       deta = deta, dazi = dphi, invm = m)
+                                       deta = deta, dazi = dphi)
         print("Filtered background")
         invariant_masses_bkg = get_invariant_masses(bkg_events)
         invariant_masses_combined = invariant_masses_higgs + invariant_masses_bkg
