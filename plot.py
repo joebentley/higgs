@@ -49,6 +49,8 @@ def main():
     parser.add_argument('--norm', action = 'store_true', help = 'Normalise all plots')
     parser.add_argument('--ratio', action = 'store_true', help = 'Use ratio to calculate the weights of higgs and bkgs.')
     parser.add_argument('--fit_bkg', action = 'store_true', help = 'Plot line of background when doing combined.')
+    parser.add_argument('--lower', help = 'Lower boundary on mass window', default=120, type=int)
+    parser.add_argument('--upper', help = 'Upper boundary on mass window', default=140, type=int)
     args = parser.parse_args()
 
     invariant_masses_higgs = parse_file('outputIM_Higgs.txt')
@@ -90,7 +92,7 @@ def main():
 
     # Get the bins for the mass range and then find the statistical
     # significance of the higgs in the mass range
-    x = np.array(range(120, 140))
+    x = np.array(range(args.lower, args.upper))
     indices_higgs = np.digitize(x, bins_higgs)
     indices_bkg = np.digitize(x, bins_bkg)
 
@@ -101,7 +103,7 @@ def main():
         sum_bkg += hist_bkg[index_bkg]
 
 
-    print('In mass window 110 to 130: ')
+    print('In mass window {0} to {1}: '.format(args.lower, args.upper))
     print('sigma = ' + str(statistical_significance(sum_higgs, sum_bkg)))
 
 
@@ -134,7 +136,7 @@ def main():
     plt.ylabel('Frequency')
     plt.title('Histogram of invariant masses')
     #plt.axis([0, 200, 0, 0.1])
-    plt.xlim((0, 200))
+    plt.xlim((0, 800))
     plt.grid(True)
     plt.legend(loc = 'upper left')
     plt.show()
