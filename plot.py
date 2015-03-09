@@ -46,6 +46,7 @@ def main():
     parser.add_argument('--not_comb', action = 'store_true', help='Do not plot the combined data')
     parser.add_argument('--higgs', action = 'store_true', help = 'Plots the histogram from only the Higgs signal')
     parser.add_argument('--bkg', action = 'store_true', help = 'Plots the histogram from only the background')
+    parser.add_argument('--masses', default = 'unfiltered_invmasses', help = 'Path to directory containing invariant masses')
     parser.add_argument('--norm', action = 'store_true', help = 'Normalise all plots')
     parser.add_argument('--ratio', action = 'store_true', help = 'Use ratio to calculate the weights of higgs and bkgs.')
     parser.add_argument('--fit_bkg', action = 'store_true', help = 'Plot line of background when doing combined.')
@@ -53,9 +54,9 @@ def main():
     parser.add_argument('--upper', help = 'Upper boundary on mass window', default=140, type=int)
     args = parser.parse_args()
 
-    invariant_masses_higgs = parse_file('outputIM_Higgs.txt')
-    invariant_masses_bkg = parse_file('outputIM_bkg.txt')
-    invariant_masses_combined = parse_file('outputIM_cmb.txt')
+    invariant_masses_higgs = parse_file(args.masses + '/outputIM_Higgs.txt')
+    invariant_masses_bkg = parse_file(args.masses + '/outputIM_bkg.txt')
+    invariant_masses_combined = parse_file(args.masses + '/outputIM_cmb.txt')
 
     cs_higgs = 17.35
     bf_yy = 2.28e-3
