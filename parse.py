@@ -67,7 +67,7 @@ def invmass_limit(events, m):
 
 #combined filter
 def combined_filter(events, num=1, momentum_lower=4, momentum_higher=50, energy_lower=20, energy_higher = 20,
-                    deta = 0, dazi = 0, invm1 = 100, invm2 = 200):
+                    deta = 0, dazi = 0, invm1 = 100, invm2 = 1000):
     #Filtering events
     #only show events with at least 2 momenta
     res = number_threshold(events, num)

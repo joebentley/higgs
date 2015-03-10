@@ -70,8 +70,8 @@ def main():
     opt_p_T1, opt_p_T2, opt_E_1, opt_E_2, opt_dphi, opt_deta, m1, m2 = default_param
 
     ranges = [
-            range(1, 11, 2),
-            range(1, 11, 2),
+            range(0, 700, 140),
+            range(0, 700, 140),
             range(1, 11, 2),
             range(1, 11, 2),
             range(0, 6, 2),

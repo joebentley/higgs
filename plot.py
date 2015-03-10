@@ -137,7 +137,7 @@ def main():
     plt.ylabel('Frequency')
     plt.title('Histogram of invariant masses')
     #plt.axis([0, 200, 0, 0.1])
-    plt.xlim((0, 800))
+    plt.xlim((0, 200))
     plt.grid(True)
     plt.legend(loc = 'upper left')
     plt.show()
