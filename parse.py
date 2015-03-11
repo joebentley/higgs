@@ -82,9 +82,9 @@ def combined_filter(events, num=1, momentum_lower=4, momentum_higher=50, energy_
     res = energy_threshold_2(res, energy_higher)
     print("Energy filtered")
 
-    #Pick2 highest p_T
+    # Pick the two highest transverse momenta from the event
     for event in res:
-        event = event.filter_highest_pt(2)
+        event.filter_highest_pt(2)
 
     print('Chose 2 highest p_T photons')
     #res = deta_threshold(res, deta)

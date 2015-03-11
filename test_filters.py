@@ -22,6 +22,8 @@ class TestFilteringFunctions(unittest.TestCase):
     def test_transverse_filter(self):
         filtered = parse.transverse_threshold(self.events, 15)
         self.assertEqual(len(filtered), 7)
+        filtered = parse.transverse_threshold(self.events, 10)
+        self.assertEqual(len(filtered), 8)
 
     def test_transverse_filter2(self):
         filtered = parse.transverse_threshold_2(self.events, 15)
@@ -44,6 +46,22 @@ class TestFilteringFunctions(unittest.TestCase):
     def test_pseudorapidity_filter(self):
         filtered = parse.deta_threshold(self.events, 0.5)
         self.assertEqual(len(filtered), 8)
+
+    def test_invmass_threshold(self):
+        filtered = parse.invmass_threshold(self.events, 15)
+        self.assertEqual(len(filtered), 7)
+        filtered = parse.invmass_threshold(self.events, 45)
+        self.assertEqual(len(filtered), 6)
+
+    def test_invmass_limit(self):
+        filtered = parse.invmass_limit(self.events, 15)
+        self.assertEqual(len(filtered), 3)
+        filtered = parse.invmass_limit(self.events, 45)
+        self.assertEqual(len(filtered), 4)
+
+    def test_highest_pt(self):
+        self.events[5].filter_highest_pt(4)
+        self.assertEqual(len(self.events[5].momenta), 4)
 
 
 if __name__ == '__main__':
