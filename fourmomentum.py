@@ -44,12 +44,20 @@ class FourMomentum:
 
     def eta(self):
         """ Return the pseudorapidity of the 4-vector. """
-        sinheta = self.momentum[2]/self.transverse()
+        if self.transverse() == 0:
+            sinheta = 0
+        else:
+            sinheta = self.momentum[2]/self.transverse()
+
         return asinh(sinheta)
 
     def azimuthal(self):
         """ Return the azimuthal angle of the 4-vector. """
-        tanphi = self.momentum[1]/self.momentum[0]
+        if self.momentum[0] == 0:
+            tanphi = 0
+        else:
+            tanphi = self.momentum[1]/self.momentum[0]
+
         return atan(tanphi)
 
     @staticmethod

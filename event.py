@@ -54,9 +54,12 @@ class Event:
                         dphi = abs(2 * pi - dphi)
                     diff.append(dphi**2)
 
-        smallest = sorted(diff)[0]
-        largest = sorted(diff)[-1]
-        return largest
+        if len(diff) == 0:
+            return 0
+        else:
+            smallest = sorted(diff)[0]
+            largest = sorted(diff)[-1]
+            return largest
 
     def eta_diff_max(self):
         diff = []

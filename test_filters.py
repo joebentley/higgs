@@ -37,6 +37,14 @@ class TestFilteringFunctions(unittest.TestCase):
         self.assertEqual(len(filtered), 6)
         self.assertEqual(len(filtered[0].momenta), 4)
 
+    def test_azimuthal_filter(self):
+        filtered = parse.dazi_threshold(self.events, 0.5)
+        self.assertEqual(len(filtered), 8)
+
+    def test_pseudorapidity_filter(self):
+        filtered = parse.deta_threshold(self.events, 0.5)
+        self.assertEqual(len(filtered), 8)
+
 
 if __name__ == '__main__':
     unittest.main()
