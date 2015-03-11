@@ -18,8 +18,7 @@ def number_threshold(events, n):
 def transverse_threshold(events, p_T):
     new_events = []
     for event in events:
-        event.momenta = list(filter(lambda x: x.transverse() > p_T, event.momenta))
-        if len(event.momenta) > 0:
+        if len(list(filter(lambda x: x.transverse() > p_T, event.momenta))) > 0:
             new_events.append(event)
     return new_events
 
@@ -38,8 +37,7 @@ def transverse_threshold_2(events, p_T):
 def energy_threshold(events, E):
     new_events = []
     for event in events:
-        event.momenta = list(filter(lambda x: x.energy > E, event.momenta))
-        if len(event.momenta) > 0:
+        if len(list(filter(lambda x: x.energy > E, event.momenta))) > 0:
             new_events.append(event)
     return new_events
 
