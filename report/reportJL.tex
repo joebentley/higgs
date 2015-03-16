@@ -1,15 +1,43 @@
 \documentclass{article}
 \author{Jake Lane}
+\title{Optimising Higgs Decay events to Background events in the diphoton channel}
 \usepackage{amsmath, graphicx}
 \begin{document}
+\maketitle
 \begin{abstract}
 \end{abstract}
 \section{Introduction}
+The aim of this project was to optimise a signal produced a program called Pythia of a decay of a Higgs Boson ($H$) to 2 photons ($\gamma$.) This report will summarise the results of the project, justify the theoretical and experimental reasoning for the methods used to obtain these results and comment on the results obtained compared to current literature. To begin a theoretical background is given first to illustrate the relevant theory being examined. The way in which the data is processed is then discussed in context of the physical processes being examined. The results are then presented in graph form, using both 3D scatter plots (for the optimisation plot) and 2D histogram plots (for the invariant mass plot). Comments on the results as well as comparison to current literature will then follow; the project's experimental (and theoretical) faults will be examined and improvements on these faults will be offered. The conclusion will summarise the results and comments in context of the literature as well as summarising the faults and possible improvements that could be made.  
 \section{Theory}
+\subsection{Higgs Mechanism}
+The Higgs mechanism, as proposed by Higgs, allowed for particles to keep their masses and keep the symmetry of the Standard Model Electroweak interaction via symmetry brekaing with a scalar field (called the 'Higgs' Field) that permeates all of space. The details of the Higgs interaction (and electroweak theory) are not needed to optimise the signal, however the decay of the Higgs boson (that arises out of the introduction of the Higgs mechanism) affected by how the Higgs field 'couples' to other particles (in particular the photon and top quark.)\subsection{Higgs Decay}
+The Higgs boson has many possible decay modes, as it is estimated to have a relatively large mass in the window of $113 < m_H < 132 GeV/c^2$ at the 95\% confidence limit. The most common decay for the Higgs boson is into a bottom, anti-bottom quark pair:
+\begin{equation}
+H \rightarrow b \bar{b}
+\end{equation}
+The decay we are interested in is the Higgs boson to 2 photons (or the 'diphoton channel'):
+\begin{equation}
+H \rightarrow \gamma \gamma
+\end{equation}
+%refer to Higgs decay theory
+This decay has a very low chance of occuring, with a branching fraction of order $10^{-3}$ times per decay. The decay of the Higgs to the 2 photons is unlikely due to the nature of the decay, since the photon (having no mass) does not couple to the Higgs field, the only way to produce 2 photons from a Higgs is for the Higgs to decay into 2 particles (usually 2 top quarks \footnote{Other particle pairs can and are produced but at such low branching fractions that they are negiglbe}) which then anhilate to produce 2 photons. The Feynmann diagam shows 3 vertices in the decay which means many more terms are required to contribute to this decay decreasing the likelihood of the decay. Compared to a 1-vertex decay which has a much higher probability of occuring. 
+\subsection{Kinematics}
+As the Higgs is produced in our simulation at a LHC-like collider experiment, there are kinematic variables introduced to parameterise the Energy and momentum (4 - momenta) of the produced photons. These are given by the transverse momentum $p_T$, the azimuthal angle $\phi$ and the pseudorapidity $\eta$ (in this case the pseudorapditiy is the rapidity see appendix) related to the energy and 3 cartesian components of the momentum vector of the photon by
+\begin{align}
+E &= p_T \cosh {\eta} \\
+p_x &= p_T \cos{\phi} \\
+p_y &= p_T \sin{\phi} \\
+p_z &= p_T \sinh{\eta}
+\end{align}
+%refer to kinematic textbook
 \section{Coding}
 \section{Results}
+\section{Comments}
 \section{Conclusion}
 \bibliographystyle{plain}
 \bibliography{reference}
-\section{
+\appendix
+\section{Derivation}
+\section{Code}
+\section{Plots}
 \end{document}
