@@ -66,12 +66,12 @@ def main():
 
     res = 0.05
     filtered_higgs = {}
-    default_param = [0, 0, 0, 0, 0, 0, 113, 132]
+    default_param = [90, 90, 0, 0, 0, 0, 113, 132]
     opt_p_T1, opt_p_T2, opt_E_1, opt_E_2, opt_dphi, opt_deta, m1, m2 = default_param
 
     ranges = [
-            range(0, 700, 140),
-            range(0, 700, 140),
+            range(0, 200, 50),
+            range(0, 200, 50),
             range(1, 11, 2),
             range(1, 11, 2),
             range(0, 6, 2),
@@ -88,10 +88,10 @@ def main():
         # Each range corresponds to the default ranges for each filter
         # in order: transverse momenta 1 & 2, energies 1 & 2, azimuthal, pseudorapidity
         ranges = [
-                    range(1, 61, 20),
-                    range(1, 61, 20),
-                    range(1, 61, 20),
-                    range(1, 61, 20),
+                    range(60, 120, 30),
+                    range(60, 120, 30),
+                    range(0, 101, 20),
+                    range(0, 101, 20),
                     range(0, 6, 2),
                     range(0, 3, 1),
                  ]
