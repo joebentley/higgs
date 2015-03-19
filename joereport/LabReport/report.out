@@ -1,13 +1,19 @@
 \BOOKMARK [1][-]{section.1}{1. Theory}{}% 1
 \BOOKMARK [2][-]{subsection.1.1}{1.1. Four Momentum}{section.1}% 2
 \BOOKMARK [2][-]{subsection.1.2}{1.2. Higgs Decay Channels}{section.1}% 3
-\BOOKMARK [1][-]{section.2}{2. PYTHIA}{}% 4
-\BOOKMARK [1][-]{section.3}{3. Weighting}{}% 5
-\BOOKMARK [1][-]{section.4}{4. Filters}{}% 6
-\BOOKMARK [2][-]{subsection.4.1}{4.1. Transverse Momenta Filtering}{section.4}% 7
-\BOOKMARK [2][-]{subsection.4.2}{4.2. Energy}{section.4}% 8
-\BOOKMARK [2][-]{subsection.4.3}{4.3. Angular}{section.4}% 9
-\BOOKMARK [2][-]{subsection.4.4}{4.4. Final Selection}{section.4}% 10
-\BOOKMARK [1][-]{section.5}{5. Optimisation of Filters}{}% 11
-\BOOKMARK [1][-]{section.6}{6. Invariant Mass Histogram}{}% 12
-\BOOKMARK [1][-]{section*.1}{References}{}% 13
+\BOOKMARK [2][-]{subsection.1.3}{1.3. Invariant Mass}{section.1}% 4
+\BOOKMARK [1][-]{section.2}{2. PYTHIA}{}% 5
+\BOOKMARK [1][-]{section.3}{3. Programming}{}% 6
+\BOOKMARK [2][-]{subsection.3.1}{3.1. parse.py}{section.3}% 7
+\BOOKMARK [2][-]{subsection.3.2}{3.2. significance.py}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.3}{3.3. plot.py}{section.3}% 9
+\BOOKMARK [1][-]{section.4}{4. Weighting}{}% 10
+\BOOKMARK [1][-]{section.5}{5. Filters}{}% 11
+\BOOKMARK [2][-]{subsection.5.1}{5.1. Number}{section.5}% 12
+\BOOKMARK [2][-]{subsection.5.2}{5.2. Transverse Momenta}{section.5}% 13
+\BOOKMARK [2][-]{subsection.5.3}{5.3. Energy}{section.5}% 14
+\BOOKMARK [2][-]{subsection.5.4}{5.4. Angular}{section.5}% 15
+\BOOKMARK [2][-]{subsection.5.5}{5.5. Final Selection}{section.5}% 16
+\BOOKMARK [1][-]{section.6}{6. Optimisation of Filters}{}% 17
+\BOOKMARK [1][-]{section.7}{7. Invariant Mass Histogram}{}% 18
+\BOOKMARK [1][-]{section*.1}{References}{}% 19
