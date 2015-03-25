@@ -66,7 +66,7 @@ def main():
 
     res = 0.05
     filtered_higgs = {}
-    default_param = [90, 90, 0, 0, 0, 0, 113, 132]
+    default_param = [90, 90, 50, 50, 0, 0, 113, 132]
     opt_p_T1, opt_p_T2, opt_E_1, opt_E_2, opt_dphi, opt_deta, m1, m2 = default_param
 
     ranges = [

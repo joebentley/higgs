@@ -183,7 +183,8 @@ def main():
     parser.add_argument('--opt', action = 'store_true', help = 'uses optimised values')
 
     args = parser.parse_args()
-    default_param = [4, 50, 20, 20, 0, 0, 50]
+    default_param = [90, 90, 50, 50, 0, 0, 100000]
+    #default_param = [0, 0, 0, 0, 0, 0, 0]
     p_T1, p_T2, E_1, E_2, dphi, deta, m = default_param
 
     if args.opt:
