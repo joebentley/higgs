@@ -27,12 +27,18 @@ H \rightarrow \gamma \gamma
 \end{equation}
 \cite{HiggsdecayEMback}
 %refer to Higgs decay theory
-This decay has a very low chance of occurring, with a branching fraction of order $10^{-3}$ times per decay. The decay of the Higgs to the 2 photons is unlikely due to the nature of the decay, since the photon (having no mass) does not couple to the Higgs field, the only way to produce 2 photons from a Higgs is for the Higgs to decay into 2 particles (usually 2 top quarks \footnote{Other particle pairs can and are produced but at such low branching fractions that they are negliglibe}) which then annihilate to produce 2 photons. The Feynman diagram shows 3 vertices in the decay which means many more terms are required to contribute to this decay decreasing the likelihood of the decay. Compared to a 1-vertex decay which has a much higher probability of occurring. 
+This decay has a very low chance of occurring, with a branching fraction of order $10^{-3}$ times per decay. \cite[p.~5]{HiggsCross3} The decay of the Higgs to the 2 photons is unlikely due to the nature of the decay, since the photon (having no mass) does not couple to the Higgs field, the only way to produce 2 photons from a Higgs is for the Higgs to decay into 2 particles (usually 2 top quarks \footnote{Other particle pairs can and are produced but at such low branching fractions that they are negligible}) which then annihilate to produce 2 photons. 
+\begin{figure}
+\includegraphics[scale=0.25]{Hyy}
+\caption{Feynman diagram for $H \rightarrow \gamma \gamma$ decay channel via a top quark loop}
+\end{figure}
+This decay is far less common than the decay to a bottom-anti bottom quark pair with a branching fraction of order $10^{0}$ \cite[p.~5]{HiggsCross3}. It is reasonable to wonder why the botton-antibottom quark decay channel was not explored instead of the di-photon channel, it is for practical purposes that the di-photon channel is preferred. As quarks cannot be isolated, the decayed bottom-anti-bottom quark pair would manifest in a 'jet' of hadrons which would require a far more complex analysis of each event for possible candidate Higgs decays, contrast to a di-photon decay where 2 photons can be isolated and do not have associated jets, it is relatively simple to identify 2 candidate photons for Higgs decay than it is to do so for a bottom-anti bottom quark decay. 
 \subsection{Significance}
-The significance, $\Sigma$ of a signal with a number of events $S$ compared a background of number of events, $B$, the significance is given by
+In order to test the effectiveness of the optimisation of the signal to background a quantitative measurement was needed, the statistical significance, $\Sigma$ is given by the number of events $S$ compared a background of number of events, $B$ as
 \begin{equation}
 \Sigma = \frac{S}{\sqrt{S + B}} 
 \end{equation}
+Note that the significance is inversely proportional to the inverse square root of the total number of events, $N = S + B$, meaning that scaling to larger number of events would yield a lower significance at a relatively fast pace. Also note that reducing the number of background events, $B$ to it's lowest ($B = 0$) would give a maximum value of $\Sigma = 1$, assuming that the signal is purely Higgs boson decays. On inspection of the signal data ('Higgs.txt') it is clear from the non-zero number of single photon events that the signal was not purely Higgs decays and needed filtering as well as the background. 
 \subsection{Kinematics}
 As the Higgs is produced in our simulation at a LHC-like collider experiment, there are kinematic variables introduced to parameterise the Energy and momentum (4 - momenta) of the produced photons. These are given by the transverse momentum $p_T$, the azimuthal angle $\phi$ and the pseudo-rapidity $\eta$ (in this case the pseudo-rapidity is the rapidity see appendix) related to the energy and 3 cartesian components of the momentum vector of the photon by
 \begin{align}
@@ -41,6 +47,7 @@ p_x &= p_T \cos{\phi} \\
 p_y &= p_T \sin{\phi} \\
 p_z &= p_T \sinh{\eta}
 \end{align}
+The reasoning behind using the transverse momentum is that it is Lorentz invariant as the particles are only moving relativistically along the beam line, perpendicular to the transverse momentum. The differences in $\phi$ and $\eta$ are also Lorentz invariant and allow for a measure of the angular distance between photons. The difference in azimuthal angle, the angle in the plane perpendicular to the beam line, would test to see if the Higgs decays into 2 back to back photons (preserving transverse momentum) and the pseudo-rapidity difference allows for a measure of angle along the beam axis that is Lorentz invariant.
 \subsection{Higgs invariant mass}
 The way in which the Higgs signal will manifest is via an 'invariant mass plot' where the frequency of the an event of invariant mass $m$ against the invariant mass. 
 The Higgs to 2 photon decay event is relativistic and requires the conservation of the magnitude of the 4-momentum, $p_H^\mu$, where $\mu = t, x, y, z$ for a 4-vector. Which leads to the relation
@@ -49,6 +56,7 @@ m_H^2 = 2 E_{\gamma 1} E_{\gamma 2} (1 + \cos(\phi_1 - \phi_2))
 \end{equation}.
 This equation is used to obtain the expected parameters of the di-photon channel, therefore it is possible to distinguish background produced photons and Higgs produced photons. 
 From (8), assuming that the transverse momenta and the energy are of the same order of magnitude and that $(1 + cos(\phi_1 - \phi_2)) \approx 1$ then it is expected that photons from a Higgs decay will have $p_T \approx m_H$.
+
 \subsection{Expectation}
 Since the current search for Higgs boson yielded a result of $5\sigma$ at mass $m_H = 126^{+ U}_{-L}$GeV at ATLAS combined with the exclusion by the LEP and Tevatron in the range $113 < m_H < 132$ GeV respectively to the 95\% confidence limit; we expect a peak in a invariant mass Histogram within the range described and near the $125$ GeV from ATLAS.
 %refer to kinematic textbook
@@ -69,18 +77,21 @@ The filtering functions work on the following algorithm
 \item The photon has property $x$
 \item $x$ satisfies an inequality $I(x, X)$
 \item Event with photon with $x$ is kept.
-\item Otherwise Event is discarded (not kept)
+\item Otherwise photon is discarded (not kept).
+\item Events with fewer than 2 photons are discarded.
 \end{enumerate}
+In the case where more than 2 photons survive the filtering process, another means is used to select 2 of the best photons that meet these criteria depending on the physical quantity being filtered.
 \subsection{Filters}
 \subsubsection{Number}
 The number of photons in each event is calculated by iterating through the list of events and finding the number of photons in each event. The event is rejected if there are fewer photons than a threshold number $n$. In our case $n=2$ since the Higgs cannot possibly decay into fewer than 2 photons, this means that the events are filtered by number both before filtering and after filtering to avoid non-Higgs candidates being present in the final array of events. 
 \subsubsection{Transverse Momentum}
 The transverse momentum filter iterates through all of the events as stored by 'parse.py' in a list and keeps every event but removes all photons from that event that have a transverse momentum $p_T < P_T$ where $P_T$ is obtained via optimising the filter with respect to the statistical significance of the Higgs signal $\Sigma$. 
+In the case of more than 2 eligible photons, the photons with the highest $p_T$ were chosen since these are more likely to be the result of a Higgs decay. 
 \subsubsection{Energy}
 As with the transverse momenta filter, the energy filter will also remove every photon with Energy $E< E_{th}$ , where $E_{th}$ is some threshold energy also obtained by optimising the energy filter. 
 \subsubsection{Azimuthal angle}
 The azimuthal angle filter considers each event and 2 photons in the event with 4-momenta $p_i, p_j$ and proceeds to find the angle $\phi_{ij}$ between them. To avoid repeating the same operation only events with $i+j<1$ are chosen so that the angle is taken between different photons a single time between them.
-\subsubsection{Pseudo-rapdity}
+\subsubsection{Pseudo-Rapidity}
 The pseudo rapidity was filtered in the same manner as the azimuthal angle, where 2 photon 4-momenta are considered and the pseudo rapidity is taken between them.
 \subsection{Optimisation}
 To optimise each of the filters, the Higgs events and background events are filtered several times and have the statistical significance, $\Sigma$ recorded at each value of the threshold value of each filter. This means that the statistical significance $\Sigma$ is a function of minimum transverse momenta $p_{T1}, p_{T2}$, minimum energy, $E_1, E_2$, minimum azimuthal angle $\phi$ and minimum pseudo rapidity $\eta$.
@@ -89,7 +100,10 @@ To optimise each of the filters, the Higgs events and background events are filt
 \end{equation}
 To find the largest value of $\Sigma$, we find the largest value by changing each of the variables that $\Sigma$ depends on. We do this by plotting $\Sigma$ against a range of values of each variable and finding the maximum value of $\Sigma$ from each one. Then the combination of all of these parameters are used to filter the events and produce an invariant mass plot.
 \subsection{Plotting}
-The invariant mass plot is used via the 'pyplot' library, creating a histogram of the invariant masses, calculated from the events using the summation of 4-momenta and taking the square \footnote{using a Minkowski metric $\eta_{\mu \nu} = diag(-1, 1, 1, 1)$} . 
+The invariant mass plot is used via the 'pyplot' library, creating a histogram of the invariant masses, calculated from the events using the summation of 4-momenta and taking the square as
+\begin{equation}
+m_{\gamma \gamma}^2 = (E_1 + E_2)^2 - ({\bf p}_1  + {\bf p}_2)^2
+\end{equation}
 \section{Results}
 \subsection{Optimisation}
 \subsubsection{Transverse Momenta}
@@ -97,6 +111,8 @@ The invariant mass plot is used via the 'pyplot' library, creating a histogram o
 \includegraphics[scale=0.5]{transverse6}
 \caption{Statistical signifiance dependence on transverse momenta}
 \end{figure}
+
+As shown in figure 2, the significance plateaus starting at $p_{T1} = p_{T2} = 90$ GeV. It is noticeable that the significance has decreased before the $p = 120$GeV value, as expected from the kinematics of the Higgs decay, this would suggest that there is 
 \subsubsection{Energy}
 \begin{figure}
 \includegraphics[scale=0.5]{energy6}
@@ -119,6 +135,7 @@ The invariant mass plot is used via the 'pyplot' library, creating a histogram o
 \includegraphics[scale=0.5]{invariantmass1}
 \caption{Invariant mass plot after optimisation}
 \end{figure}
+As seen 
 \section{Conclusion}
 The op
 \bibliographystyle{plain}
@@ -129,8 +146,11 @@ The op
 \subsection{Derivation of invariant mass}
 \section{Code}
 \subsection{Parse}
+
 \subsection{Significance}
+
 \subsection{Plot}
+
 \section{Plots}
 \subsection{Optimisation}
 \subsection{Invariant Mass}
