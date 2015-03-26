@@ -1,8 +1,5 @@
 \begin{thebibliography}{1}
 
-\bibitem{peterHiggs66}
-
-
 \bibitem{HiggsDetection}
 Georges Aad et~al.
 \newblock {Observation of a new particle in the search for the Standard Model
@@ -13,6 +10,11 @@ Georges Aad et~al.
 S~Heinemeyer et~al.
 \newblock {Handbook of LHC Higgs Cross Sections: 3. Higgs Properties}.
 \newblock 2013.
+
+\bibitem{peterHiggs66}
+Peter~W. Higgs.
+\newblock Spontaneous symmetry breakdown without massless bosons.
+\newblock {\em Phys. Rev.}, 145:1156--1163, May 1966.
 
 \bibitem{HiggsdecayEMback}
 K.~Nielsen, N.\.

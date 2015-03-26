@@ -61,8 +61,8 @@ def main():
     cs_higgs = 17.35
     bf_yy = 2.28e-3
     cs_bkg = 140
-    w_higgs = cs_higgs * bf_yy
-    w_bkg = cs_bkg
+    w_higgs = cs_higgs * bf_yy/cs_bkg
+    w_bkg = 1
 
     if args.ratio:
         ratio = (w_higgs / w_bkg) * len(invariant_masses_bkg)
